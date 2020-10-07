@@ -1,0 +1,40 @@
+{
+    "name": "celtic34fr/laminas-got",
+    "description": "Laminas implementation for using GraphicObjectTemplating",
+    "type": "project",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "templating",
+        "engine",
+        "zf",
+        "laminas",
+        "zend framework"
+    ],
+    "authors": [
+        {
+          "name":      "Gilbert ARMENGAUD",
+          "email":     "gilbert.armengaud@gmail.com",
+          "role":      "Project Leader"
+        }
+    ],
+    "homepage": "http://github.com/celtic34fr/laminas-got",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": "^7.4",
+        "celtic34fr/graphic-object-templating": "@dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "LaminasGOT\\": "src/"
+        }
+      },
+    "autoload-dev": {
+        "psr-4": {
+        }
+    },
+    "require-dev": {
+        "zendframework/zend-developer-tools": "^1.1.0",
+        "san/san-session-toolbar": "^2.0.2"
+    }
+}
