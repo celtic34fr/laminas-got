@@ -1,0 +1,78 @@
+
+.display-none { display: none !important; }
+.display-block { display: block; }
+.display-inline { display: inline; }
+.display-inline-block { display: inline-block; }
+
+.ospaddingV01 { padding: 0.1em 0; }
+.ospaddingV02 { padding: 0.2em 0; }
+.ospaddingV05 { padding: 0.5em 0; }
+.ospaddingV10 { padding:   1em 0; }
+.ospaddingV20 { padding:   2em 0; }
+
+.ospaddingH01 { padding: 0 0.1em; }
+.ospaddingH02 { padding: 0 0.2em; }
+.ospaddingH05 { padding: 0 0.5em; }
+.ospaddingH10 { padding:   0 1em; }
+.ospaddingH20 { padding:   0 2em; }
+
+.ospadding01  { padding:   0.1em; }
+.ospadding02  { padding:   0.2em; }
+.ospadding05  { padding:   0.5em; }
+.ospadding10  { padding:     1em; }
+.ospadding20  { padding:     2em; }
+
+.osmarginV01 { margin: 0.1em 0; }
+.osmarginV02 { margin: 0.2em 0; }
+.osmarginV05 { margin: 0.5em 0; }
+.osmarginV10 { margin:   1em 0; }
+.osmarginV20 { margin:   2em 0; }
+
+.osmarginH01 { margin: 0 0.1em; }
+.osmarginH02 { margin: 0 0.2em; }
+.osmarginH05 { margin: 0 0.5em; }
+.osmarginH10 { margin:   0 1em; }
+.osmarginH20 { margin:   0 2em; }
+
+.osmargin01  { margin:   0.1em; }
+.osmargin02  { margin:   0.2em; }
+.osmargin05  { margin:   0.5em; }
+.osmargin10  { margin:     1em; }
+.osmargin20  { margin:     2em; }
+
+.border-noir-01 {
+    border: 0.1em black solid;
+}
+
+body {
+    margin: 0 !important;
+    height: 100% !important;
+    padding-top: 1em;
+    padding-bottom: 1.5em;
+}
+
+select[disabled],
+select.disabled {
+    cursor: not-allowed;
+    cursor: not-allowed;
+}
+
+.form-control-got {
+    display: block;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+.full-width { width: 100%; }

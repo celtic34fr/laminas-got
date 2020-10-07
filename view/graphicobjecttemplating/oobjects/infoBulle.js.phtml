@@ -1,0 +1,34 @@
+<?php
+/** paramétrage :
+ * infoBulle.setIB : booléen indiquant la mise en place ou non du tooptip/popover (quelque chose à afficher)
+ * id              : selectetur jQuery ou devra être positionné le tooltip ou le popover
+ * infoBulle       : tableau de paramètrage du tooltip ou du popover
+ **/
+
+use GraphicObjectTemplating\OObjects\OTInfoBulle;
+
+function setInfoBulle($infoBulle, $id) {
+    $title   = ($infoBulle->type === OTInfoBulle::IBTYPE_TOOLTIP && !empty($infoBulle->content)) ? $infoBulle->content : '';
+    $title   = $infoBulle->title.' '.$title;
+
+    if ($infoBulle->setIB) {
+        echo '<script lang="JavaScript">';
+        echo '    $(document).ready(function (e) {';
+        echo '        $("'.$id.'").'.$infoBulle->type.'({';
+        echo '            animation: '.($infoBulle->animation ? 'true' : 'false').',';
+        echo '            html: '.$infoBulle->html.',';
+        echo '            placement: "'.$infoBulle->placement.'",';
+        echo '            delay : {';
+        echo '                show : '.$infoBulle->delay_show.',';
+        echo '                hide : '.$infoBulle->delay_hide.',';
+        echo '            },';
+        echo '            title : "'.$title.'",';
+        if ($infoBulle->type === OTInfoBulle::IBTYPE_POPOVER) {
+            echo '            content : "'.$infoBulle->content.'",';
+        }
+        echo '            trigger : "'.$infoBulle->trigger.'",';
+        echo '        });';
+        echo '    });';
+        echo '</script>';
+    }
+}

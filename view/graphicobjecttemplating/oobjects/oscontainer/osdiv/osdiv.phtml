@@ -1,0 +1,35 @@
+<?php
+/** template de l'objet OSDiv **/
+
+$id = $this->objet['id'];
+$classes = $this->objet['classes'];
+$display = $this->objet['display'];
+$object = $this->objet['object'];
+$widthBT = $this->objet['widthBT'];
+$codeCss = $this->objet['codeCss'];
+$autoCenter = $this->objet['autoCenter'];
+$acPx = $this->objet['acPx'];
+$acPy = $this->objet['acPy'];
+$content = $this->content;
+
+$objClasses = 'gotObject hidden ' . $id . " " . $classes;
+
+?>
+
+<div id="<?=$id?>" class="<?=$objClasses?>" data-display="<?=$display?>" data-objet="<?=$object?>"
+     <?php if ($widthBT) {?> data-widthbt="<?=$widthBT?>"<?php } ?>
+>
+    <style>
+        <? if ($codeCss){
+        include $this->asset("graphicobjecttemplating/oobjects/oscontainer/style.phtml");
+        setCodeCss($codeCss);
+        } ?>
+
+        <? if ($autoCenter){
+        include $this->asset("graphicobjecttemplating/oobjects/autoCenter.phtml");
+        setAutoCenter($id, $acPx, $acPy);
+        } ?>
+    </style>
+
+    <?= $content ?>
+</div>

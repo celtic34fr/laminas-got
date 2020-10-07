@@ -1,0 +1,129 @@
+<?php
+$id = $this->objet['id'];
+$object = $this->objet['object'];
+$display = $this->objet['display'];
+$widthBT = $this->objet['widthBT'];
+$classes = $this->objet['classes'];
+$cols = $this->objet['colsHead'];
+$datas = $this->objet['datas'];
+$events = $this->objet['events'];
+$event = $this->objet['event'];
+$styles = $this->objet['styles'];
+
+$objClasses = 'gotObject hidden ' . $id . " " . $classes;
+
+function formatEvents(array $evtsTabs, string $id, string $object)
+{
+    $formatedEvents = [];
+    foreach ($evtsTabs as $evt => $evtTab) {
+        $corpsEvent =
+            'let objetDOM = $(this);
+             let objet = new ' . $object . '(objetDOM);
+             var invalid = "";
+             if (typeof objet.invalidate === "function") {
+                invalid = objet.invalidate();
+             }
+             if (invalid.length == 0) {
+                 $(this).remove("has-error");
+                 $(this).find("span.error").removeClass("hidden").addClass("hidden");
+                 invokeAjax(objet.getData("' . $evt . '"), "' . $id . '", "' . $evt . '", e);
+             } else {
+                 $(this).remove("has-error").addClass("has-error");
+                 $(this).find("span.error").removeClass("hidden");
+                 $(this).find("span.error").html(invalid);
+             }';
+        foreach ($evtTab as $noLine => $params) {
+            foreach ($params as $noCol => $item) {
+                $formatedSelector = "#" . $id . (((int)$noLine > 0) ? ' lno' . (int)$noLine : '') . (((int)$noCol > 0) ? ' cno' . (int)$noCol : '');
+                $formatedEvents[] = $formatedSelector . "on('" . $evt . "', function(e) {" . $corpsEvent . "};";
+            }
+        }
+    }
+    return $formatedEvents;
+}
+
+function formatStyles(array $stylesTab, string $id, string $object) {
+    $formatedStyles = [];
+    foreach ($stylesTab as $noLine => $params) {
+        foreach ($params as $noCol => $item) {
+            $formatedSelector = "#" . $id . (((int)$noLine > 0) ? ' lno' . (int)$noLine : '') . (((int)$noCol > 0) ? ' cno' . (int)$noCol : '');
+            $formatedStyles[] = $formatedSelector . " {" .$item. " }";
+        }
+    }
+    return $formatedStyles;
+}
+
+?>
+
+<div id="<?= $id ?>" class="<=?objClasses?>" data-objet="<?= $object ?>" data-display="<?= $display ?>"
+     data-widthbt="<?= $widthBT ?>"
+    <?php if ($event) {
+        require_once __DIR__ . "/../../../../graphicobjecttemplating/oobjects/eventsHTML.phtml";
+        setEvents($event);
+    } ?>
+>
+    <style>
+        #<?=$id?>_table {
+            width: 100% !important;
+        }
+
+        <?php if (count($styles) > 0) {
+            foreach (formatStyles($styles, $id, $object) as $formatStyle) {
+                echo $formatStyle;
+            }
+        } ?>
+    </style>
+    <table id="<?= $id ?>_table" class="lno0 cno0 <?= $objClasses ?>" data-lno="0" data-cno="0">
+        <thead class="<?= $id ?>Head">
+        <tr class="line">
+            <?php foreach ($cols as $col) {
+                if ($col['view'] === true) {
+                    $loop = -1;
+                    $libel = trim($col['libel']) ?>
+                    <th class="col cno<?= $loop ?>" data-col="<?= $loop ?>"><?= $libel ?></th>
+                <?php } ?>
+            <?php } ?>
+        </tr>
+        </thead>
+        <tbody class="<?= $id ?>">
+        <tr class="line nodata <?php if (count($datas) > 0) { ?>hide<?php } ?>">
+            <?php $colspan = count($cols); ?>
+            <td colspan="<?= $colspan ?>" style="text-align: center">No data to show</td>
+        </tr>
+        <?php if (count($datas) > 0) {
+            foreach ($datas as $lno => $data) {
+                if ($datas['view'] === true) {
+                    $key = 'line' . $lno;
+                    $data0 = $data[0]; ?>
+                    <tr class="line lno<?= $lno ?>" data-lno="<?= $lno ?>">
+                        <?php foreach ($data as $cno => $col) {
+                            if ($cno > 0) {
+                                if ($cols[$cno]['view'] === true) {
+                                    $col = trim($col);
+                                    $key = 'col' . $cno; ?>
+                                    <td class="col cno<?= $cno ?>" data-cno="<?= $cno ?>"><?= $col ?></td>
+                                <?php }
+                            }
+                        } ?>
+                    </tr>
+                <?php } ?>
+            <?php } ?>
+        <?php } ?>
+        </tbody>
+    </table>
+
+    <script id="<?= $id ?>Script">
+        <?php if (!empty($events)) {
+            foreach (formatEvents($events, $id, $object) as $formatEvent) {
+                echo $formatEvent;
+            }
+        } ?>
+
+        <?php if (!empty($event)) { ?>
+        $(document).ready(function (e) { <?php
+            require_once __DIR__ . "/../../../../graphicobjecttemplating/oobjects/eventsJS.phtml";
+            setOnEvents($event, $this->objet);
+            ?> });
+        <?php } ?>
+    </script>
+</div>

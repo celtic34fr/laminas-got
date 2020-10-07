@@ -1,0 +1,36 @@
+<?php
+/** template pour l'ajout de la gestion des évènements à tout objet
+ * l'event 'dummy' permet de programmer manuellement un évènement JavaScript sans déclenchement de callback
+ **/
+function setOnEvents($events, $objet, $tag = null)
+{
+    foreach ($events as $evt => $event) {
+        if (!empty($event)) {
+            if ($event['class'] !== 'dummy') {
+                echo '$(".' . $objet['id'] . '").on("' . $evt . '", ';
+                if ($tag) { echo '"' . $tag . '",'; }
+                echo " function (e) {";
+                if ($event['class'] === "javascript:") {
+                    echo $event['method'];
+                } else {
+                    echo 'let objetDOM = $(this);';
+                    echo 'let objet = new ' . $objet['object'] . '(objetDOM);';
+                    echo 'var invalid = "";';
+                    echo 'if (typeof objet.invalidate === "function") {';
+                    echo 'invalid = objet.invalidate();';
+                    echo '}';
+                    echo 'if (invalid.length == 0) {';
+                    echo '    $(this).remove("has-error");';
+                    echo '    $(this).find("span.error").removeClass("hidden").addClass("hidden");';
+                    echo '    invokeAjax(objet.getData("' . $evt . '"), "' . $objet['id'] . '", "' . $evt . '", e);';
+                    echo '} else {';
+                    echo '    $(this).remove("has-error").addClass("has-error");';
+                    echo '    $(this).find("span.error").removeClass("hidden");';
+                    echo '    $(this).find("span.error").html(invalid);';
+                    echo '}';
+                }
+                echo "});";
+            }
+        }
+    }
+}

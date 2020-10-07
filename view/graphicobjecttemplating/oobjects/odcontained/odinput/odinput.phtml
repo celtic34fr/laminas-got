@@ -1,0 +1,163 @@
+<?php
+/** template de l'objet ODInput **/
+
+use GraphicObjectTemplating\OObjects\ODContained\ODInput;
+
+$id = $this->objet['id'];
+$classes = $this->objet['classes'];
+$form = $this->objet['form'];
+$events = $this->objet['event'];
+$object = $this->objet['object'];
+$display = $this->objet['display'];
+$widthBT = $this->objet['widthBT'];
+$default = $this->objet['default'];
+$type = $this->objet['type'];
+$reveal_pwd = $this->objet['reveal_pwd'];
+$labelWidthBT = $this->objet['labelWidthBT'];
+$inputWidthBT = $this->objet['inputWidthBT'];
+$label = $this->objet['label'];
+$name = $this->objet['name'];
+$value = $this->objet['value'];
+$size = $this->objet['size'];
+$minLength = $this->objet['minLength'];
+$maxLength = $this->objet['maxLength'];
+$autoFocus = $this->objet['autoFocus'];
+$state = $this->objet['state'];
+$valMin = $this->objet['valMin'];
+$valMax = $this->objet['valMax'];
+$mask = $this->objet['mask'];
+$placeholder = $this->objet['placeholder'];
+//$infoBulle = $this->objet['infoBulle'];
+
+/** traitement de la génération des classes pour event **/
+$objClasses = 'gotObject hidden ' . $id . " " . $classes;
+if ($form) {
+    $objClasses .= " form-group row ";
+}
+foreach ($events as $evt => $event) {
+    if ($evt === ODInput::EVENT_CHANGE) {
+        $objClasses .= " inputChg ";
+    }
+    if ($evt === ODInput::EVENT_KEYUP) {
+        $objClasses .= " inputKup ";
+    }
+}
+?>
+
+<div id="<?= $id ?>" class="<?= $objClasses ?>" data-objet="<?= $object ?>" data-display="<?= $display ?>"
+     data-widthBT="<?= $widthBT ?>" <?php if ($form) { ?> data-form="<?= $form ?>" <?php } ?>
+    <?php
+    if ($events) {
+        include $this->asset("graphicobjecttemplating/oobjects/eventsHTML.phtml");
+        setEvents($events);
+    }
+    ?>
+     data-default="
+    <?php
+     if ($default === false) { ?>false<?php } elseif ($default === true) { ?>true<?php } else {
+         echo $default;
+     } ?>
+    "
+>
+    <style>
+        <?php
+        if ($type === ODInput::INPUTTYPE_PASSWORD && $reveal_pwd) { ?>
+        span.field-icon {
+            position: absolute;
+            display: inline-block;
+            cursor: pointer;
+            right: 1.5rem;
+            top: 0.6rem;
+            color: black;
+            z-index: 2;
+        }
+
+        <?php } ?>
+    </style>
+    <label for="<?= $id ?>Input"
+        <?php if ($labelWidthBT) {
+            echo 'data-widthbt="' . $labelWidthBT . '" ';
+        } ?>
+    ><?= $label ?></label>
+    <input id="<?= $id ?>Input" name="<?= $name ?>" type="<?= $type ?>"
+        <?php
+        if ($value !== false) {
+            echo ' data-value="' . $value . '" ';
+        }
+        if ($size !== false) {
+            echo ' data-size="' . $size . '" ';
+        }
+        if ($minLength !== false) {
+            echo ' data-minlength="' . $minLength . '" ';
+        }
+        if ($maxLength !== false) {
+            echo ' data-maxlength="' . $maxLength . '" ';
+        }
+        if ($inputWidthBT) {
+            echo ' data-widthbt="' . $inputWidthBT . '" ';
+        }
+        if ($autoFocus) {
+            echo ' autofocus ';
+        }
+        if (!$state) {
+            echo " disabled ";
+        }
+        ?>
+           class="form-control-got"
+        <?php
+        if ($type == ODInput::INPUTTYPE_NUMBER) {
+            if ($valMin) {
+                echo ' data-valmin="' . $valMin . '" ';
+            }
+            if ($valMax) {
+                echo ' data-valmax="' . $valMax . '" ';
+            }
+        }
+        if ($mask !== false) {
+            echo ' data-mask="' . $mask . '" ';
+        }
+        if ($placeholder !== false) {
+            echo ' data-placeholder="' . $placeholder . '" ';
+        } ?>
+    >
+    <?php if ($type === ODInput::INPUTTYPE_PASSWORD && $reveal_pwd) { ?>
+        <span class="fa fa-fw fa-eye field-icon reveal"></span>
+    <?php } ?>
+    <span class="help-block hidden"></span>
+    <span class="error hidden"></span>
+
+    <script>
+        $(document).ready(function (evt) {
+            <?php if ($labelWidthBT) { ?>
+            setBtClasses("#<?= $id ?> label", $("#<?= $id ?> label").data("widthbt"));
+            <?php } ?>
+            <?php if ($inputWidthBT) { ?>
+            setBtClasses("#<?= $id ?> input", $("#<?= $id ?> input").data("widthbt"));
+            <?php } ?>
+
+            <?php if ($reveal_pwd) { ?>
+            $(".reveal").on('click', function () {
+                $(this).toggleClass('fa-eye fa-eye-slash');
+                let input = $(this).parent().find('input');
+                if (input.attr('type') === 'password') {
+                    input.attr('type', 'text');
+                } else {
+                    input.attr('type', 'password');
+                }
+            });
+            <?php
+            }
+
+            if (!empty($this->objet['event'])) {
+                require_once __DIR__."/../../../../graphicobjecttemplating/oobjects/eventsJS.phtml";
+                setOnEvents($this->objet['event'], $this->objet);
+            }
+
+            //    if ($infoBulle) {
+            //        include $this->asset("graphicobjecttemplating/oobjects/infoBulle.js.phtml");
+            //        setInfoBulle($infoBulle, $id);
+            //    }
+            ?>
+        });
+    </script>
+</div>

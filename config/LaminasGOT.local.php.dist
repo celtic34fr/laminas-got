@@ -1,0 +1,16 @@
+<?php
+
+return [
+    'gotParameters' => [
+        'sessionParms' => [
+            'remember_me_seconds' => 3600, // 2 heures de temps de vie (rememberMe)
+            'gc_maxlifetime' => 14400,     // 4 heures de temps de vie max
+            'gc_divisor' => 1,
+            'use_cookies' => true,
+            'cookie_httponly' => true,
+        ],
+        "version"       => "V0.3.1",
+        "ref"           => "202009",
+        "template_ext"  => "phtml",
+    ],
+];

@@ -1,0 +1,9 @@
+<?php
+
+function setEvents($events) {
+    if (!empty($events)) {
+        foreach ($events as $evt => $event) {
+            echo 'data-' . $evt . '-stopevt = "' . $event['stopEvent'] . '" ';
+        }
+    }
+}

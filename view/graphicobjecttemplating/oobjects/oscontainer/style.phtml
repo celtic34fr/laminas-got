@@ -1,0 +1,8 @@
+<?php
+
+function setCodeCss($codeCss)
+{
+    foreach ($codeCss as $selector => $code) {
+        echo $selector.' { '.$code.' } ';
+    }
+}

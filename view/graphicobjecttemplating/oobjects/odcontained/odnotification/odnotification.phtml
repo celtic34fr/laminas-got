@@ -1,0 +1,88 @@
+<?php
+/** template de l'objet ODNotification */
+
+use GraphicObjectTemplating\OObjects\OObject;
+
+$action = $this->objet['action'];
+$size = $this->objet['size'];
+$delay = $this->objet['delay'];
+$delayIndicator = $this->objet['delayIndicator'];
+$closable = $this->objet['closable'];
+$closeOnClick = $this->objet['closeOnClick'];
+$width = $this->objet['width'];
+$position = $this->objet['position'];
+$sound = $this->objet['sound'];
+$soundPath = $this->objet['soundPath'];
+$soundExt = $this->objet['soundExt'];
+$type = $this->objet['type'];
+$showAfterPrevious = $this->objet['showAfterPrevious'];
+$body = $this->objet['body'];
+$delayMessage = $this->objet['delayMessage'];
+$id = $this->id;
+$icon = $this->objet['icon'];
+$iconSource = $this->objet['iconSource'];
+$showClass = $this->objet['showClass'];
+$hideClass = $this->objet['hideClass'];
+
+if ($action === 'init') { ?>
+<div id="<?=$id?>Div" class="gotObject hidden">
+    <!-- initialisation à mettre au niveau du header de la page -->
+    <script>
+        var <?=$id?>Lobibox = Lobibox;
+        $(document).ready(
+            <?=$id?>Lobibox.notify.DEFAULTS = $.extend({}, <?=$id?>Lobibox.notify.DEFAULTS, {
+                title: true,
+                size: '<?=$size?>',
+                showClass: <?=$showClass?>,
+                hideClass: <?=$hideClass?>,
+                icon: <?=$icon?>,
+                msg: '',
+                img: null,
+                closable: <?=$closable?>,
+                delay: <?=$delay?>,
+                delayIndicator: <?=$delayIndicator?>,
+                closeOnClick: <?=$closeOnClick?>,
+                width: <?=$width?>,
+                position: "<?=$position?>",
+                iconSource: "<?=$iconSource?>",
+                sound: <?= $sound ?>,
+            <?php if ($sound === OObject::BOOLEAN_TRUE) { ?>
+                soundPath: '<?=$soundPath?>',
+                soundExt: '<?=$soundExt?>',
+            <?php } ?>
+            })
+        );
+    </script>
+    <input id="<?=$id?>ListLength" type="hidden" name="listLength" value="0"/>
+    <script id="<?=$id?>" type="text/javascript">
+    </script>
+</div>
+<?php }
+
+if ($action === 'send') { ?>
+<script id='<?=$id?>' type="text/javascript">
+    if ( <?=$id?>Lobibox.notify.list.length === 0) {
+        <?=$id?>Lobibox.notify('<?=$type?>', {
+            showAfterPrevious: <?= $showAfterPrevious ?>,
+        <?php if (!empty($title)) { ?>title: '<?=$title?>', <?php } ?>
+            <?php if ($sound === OObject::BOOLEAN_FALSE) {?> sound: false, <?php } ?>
+            delay: <?=$delay?>,
+            msg: '<?=$body?>'
+        });
+            $('#<?=$id?>ListLength').val(1);
+        } else {
+            var listLength = parseInt($('#<?=$id?>ListLength').val());
+            var delayTime  =  <?=$delayMessage?> * listLength;
+            setTimeout(function () {
+                <?=$id?>Lobibox.notify('{{ objet.type }}', {
+                showAfterPrevious: <?= $showAfterPrevious ?>,
+            <?php if (!empty($title)) {?>title: '<?=$title?>', <?php } ?>
+            <?php if ($sound === OObject::BOOLEAN_FALSE) {?> sound: false, <?php } ?>
+            delay: <?=$delay?>,
+            msg: '<?=$body?>'
+        });
+        }, delayTime );
+        $('#<?=$id?>ListLength').val(listLength + 1);
+    }
+</script>
+<?php } ?>

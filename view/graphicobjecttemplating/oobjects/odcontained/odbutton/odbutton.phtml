@@ -1,0 +1,176 @@
+<?php
+/** template de l'objet ODButton **/
+
+use GraphicObjectTemplating\OObjects\ODContained\ODButton;
+
+$width = $this->objet['width'];
+$height = $this->objet['height'];
+$id = $this->objet['id'];
+$object = $this->objet['object'];
+$type = $this->objet['type'];
+$nature = $this->objet['nature'];
+$label = $this->objet['label'];
+//$infoBulle = $this->objet['infoBulle']
+$pathFile = $this->objet['pathFile'];
+$left = $this->objet['left'];
+$event = $this->objet['event'];
+$classes = $this->objet['classes'];
+$customColor = $this->objet['customColor'];
+$custom = $this->objet['custom'];
+$customBorder = $this->objet['customBorder'];
+$icon = $this->objet['icon'];
+$default = $this->objet['default'];
+$widthBT = $this->objet['widthBT'];
+$display = $this->objet['display'];
+$form = $this->objet['form'];
+$value = $this->objet['value'];
+$state = $this->objet['state'];
+
+$btnClasses = '';
+$widthBT = '';
+
+$objClasses = 'gotObject hidden '.$id." ". $classes;
+if (!empty($event) && $type !== ODButton::BUTTONTYPE_LINK) {
+    $objClasses .= ' btnCback ';
+}
+?>
+
+<style>
+    <?php
+    if ($width) {
+        $btnClasses .= ' width';
+        echo "#".$id." .width { width: ".$width." !important; }";
+    }
+    if ($height) {
+        $btnClasses .= ' height';
+        echo "#".$id." .height { height: ".$height." !important; }";
+    }
+    if ($width && $height) {
+        echo "#".$id." {";
+        echo "    float: left; ";
+        echo "    padding: 0 2px !important; ";
+        echo "}";
+    }
+
+    if ($btnClasses) {
+        echo "#".$id." button { width: 100%; }";
+    }
+
+    if ($this->objet['custom']) {
+        echo "#".$id." .btn-custom {";
+        echo "    color: #".$customColor."; ";
+        echo "    background-color: #".$custom."; ";
+        echo "    border-color: #".$customBorder."; ";
+        echo "}";
+    }
+
+    if ($pathFile) {
+        echo '.'.$id." .ico-custom:before{ ";
+        echo "    content: ''; ";
+        echo '    background: url("'.$pathFile.'"); ';
+        echo "    background-size: cover; ";
+        echo "    position: absolute; ";
+        echo "    width: ".$width."; ";
+        echo "    height: ".$height."; ";
+        echo "    left: ".$left."; ";
+        echo "    top:0; ";
+        echo "}";
+    }
+     ?>
+</style>
+
+<?php
+$routeURL = '';
+$codeJs = '';
+/** bouton lien sur route Laminas */
+if ($type === ODButton::BUTTONTYPE_LINK) {
+    if (array_key_exists('click', $event)) {
+        $route = $event['click']['class'];
+        $params = $event['click']['method'];
+        if ($route && $route !== 'javascript:') {
+            if (!$params) {
+                $routeURL = $this->url(strtolower($route));
+            } else {
+                $routeURL = $this->url(strtolower($route), $params);
+            }
+        } else {
+            $codeJs = $params;
+        }
+    }
+}
+
+$icoClass = "";
+if ($icon) {
+    $icoClass = $icon;
+} elseif ($pathFile) {
+    $icoClass = "ico-custom";
+}
+
+?>
+
+<div id="<?= $id ?>" data-objet="<?= $object ?>" class="<?= $objClasses ?>"
+     data-role="<?= $type ?>"
+     data-default="
+    <?php
+     if ($default === false) { ?>false<?php } elseif ($default === true) { ?>true<?php } else {
+         echo $default;
+     } ?>
+    "
+    <?php
+    if ($widthBT) {
+        echo 'data-widthbt="' . $widthBT . '" ';
+    }
+    if ($display) {
+        echo 'data-display="' . $display . '" ';
+    }
+    if ($form) {
+        echo 'data-form="' . $form . '" ';
+    }
+
+    if ($type !== ODButton::BUTTONTYPE_LINK) {
+        if ($event) {
+            require_once __DIR__."/../../../../graphicobjecttemplating/oobjects/eventsHTML.phtml";
+            setEvents($event);
+        }
+    }
+    ?>
+>
+    <button class="<?=$nature?> <?=$btnClasses?> full-width"
+        <?php
+        if ($type === ODButton::BUTTONTYPE_LINK) {
+            if ($routeURL) {
+                echo ' onclick="location.href=\'' . $routeURL . '\'" ';
+            } elseif ($codeJs) {
+                echo ' onclick="javascript:' . $codeJs . '" ';
+            }
+        }
+        if ($value !== false) {
+            echo 'data-value="' . $value . '" ';
+        }
+        if (!$state) {
+            echo " disabled ";
+        }
+        ?>
+    >
+        <?php if ($icoClass) {
+            echo ' <i class="' . $icoClass . '"></i>';
+        }
+        echo $label; ?>
+    </button>
+
+    <?php
+    if ($type !== 'link' && !empty($event)) { ?>
+    <script>
+        $(document).ready(function (e) { <?php
+            require_once __DIR__."/../../../../graphicobjecttemplating/oobjects/eventsJS.phtml";
+            setOnEvents($event, $this->objet);
+        ?> });
+    </script>
+    <?php }
+
+    //    if ($infoBulle) {
+    //        include $this->asset("graphicobjecttemplating/oobjects/infoBulle.js.phtml");
+    //        setInfoBulle($infoBulle, $id);
+    //    }
+    ?>
+</div>

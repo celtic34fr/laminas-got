@@ -1,0 +1,26 @@
+<?php
+
+/** template de rendu de GotHeader **/
+
+$cssS = $this->scripts['css'];
+$jsS = $this->scripts['js'];
+$fonts = $this->scripts['font'];
+
+foreach ($cssS as $css) { ?>
+    <link href="<?=$this->basePath($css)?>" rel="stylesheet" type="text/css">
+<?php }
+foreach ($jsS as $js) { ?>
+    <script type="text/javascript" src="<?=$this->basePath($js)?>"></script>
+<?php }
+
+if (!empty($fonts)) { ?>
+    <style>
+        <?php foreach ($fonts as $name => $fontURL) {
+            $name = str_split('.', $name); ?>
+    @font-face {
+        font-family: '<?=$name?>';
+        src: url('<?=$this->basePath($fontURL)?>') format("truetype");
+    }
+        <?php  } ?>
+    </style>
+<?php } ?>
