@@ -27,7 +27,6 @@ $value = $this->objet['value'];
 $state = $this->objet['state'];
 
 $btnClasses = '';
-$widthBT = '';
 
 $objClasses = 'gotObject hidden '.$id." ". $classes;
 if (!empty($event) && $type !== ODButton::BUTTONTYPE_LINK) {
@@ -117,7 +116,7 @@ if ($icon) {
      } ?>
     "
     <?php
-    if ($widthBT) {
+    if ($widthBT && !$width && !$height) {
         echo 'data-widthbt="' . $widthBT . '" ';
     }
     if ($display) {
