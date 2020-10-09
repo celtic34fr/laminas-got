@@ -77,10 +77,21 @@ function formatStyles(array $stylesTab, string $id, string $object) {
         <thead class="<?= $id ?>Head">
         <tr class="line">
             <?php foreach ($cols as $col) {
+                $loop = -1;
                 if ($col['view'] === true) {
-                    $loop = -1;
+                    $loop += 1;
+                    $classTd = "col cno".$loop;
+                    $styleTD = "";
+                    if (array_key_exists('widthBT', $col) && !empty($col['widthBT'])) {
+                        $classTd .= ' '.$cols['widthBT'];
+                    } elseif (array_key_exists('width', $col) && !empty($col['width'])) {
+                        $styleTd = 'width: '.$col['width'];
+                    }
                     $libel = trim($col['libel']) ?>
-                    <th class="col cno<?= $loop ?>" data-col="<?= $loop ?>"><?= $libel ?></th>
+                    <th class="<?=$classTd?>" data-col="<?=$loop?>"
+                        <?php if (!empty($styleTd)) {?>style="<?=$styleTD?>"<?php } ?> >
+                        <?= $libel ?>
+                    </th>
                 <?php } ?>
             <?php } ?>
         </tr>
