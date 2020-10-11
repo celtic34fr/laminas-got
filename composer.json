@@ -22,7 +22,7 @@
     "prefer-stable": true,
     "require": {
         "php": "^7.4",
-        "celtic34fr/graphic-object-templating": "^0.2"
+        "celtic34fr/graphic-object-templating": ">=0.2.0"
     },
     "autoload": {
         "psr-4": {
