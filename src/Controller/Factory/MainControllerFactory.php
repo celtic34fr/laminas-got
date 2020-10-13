@@ -35,6 +35,6 @@ class MainControllerFactory implements FactoryInterface
         /** @var ObjectsManager $objectsManager */
         $objectsManager = $container->get('objects.manager');
 
-        return new MainController( $serviceManager, $gotServices, $objectsManager );
+        return new MainController($serviceManager, $gotServices, $objectsManager);
     }
 }

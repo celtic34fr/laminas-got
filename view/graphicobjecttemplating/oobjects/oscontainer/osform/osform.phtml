@@ -26,13 +26,13 @@ $objClasses = 'gotObject hidden ' . $id . " " . $classes;
     <?php if ($widthBT) {?> data-widthbt="<?=$widthBT?>"<?php } ?>
 >
     <style>
-        <? if ($codeCss){
-        include $this->asset("graphicobjecttemplating/oobjects/oscontainer/style.phtml");
+        <?php if ($codeCss){
+        require_once __DIR__."/../../../../graphicobjecttemplating/oobjects/oscontainer/style.phtml";
         setCodeCss($codeCss);
         } ?>
 
-        <? if ($autoCenter){
-        include $this->asset("graphicobjecttemplating/oobjects/autoCenter.phtml");
+        <?php if ($autoCenter){
+        require_once __DIR__."/../../../../graphicobjecttemplating/oobjects/autoCenter.phtml";
         setAutoCenter($id, $acPx, $acPy);
         } ?>
     </style>
@@ -51,7 +51,7 @@ $objClasses = 'gotObject hidden ' . $id . " " . $classes;
         <?=$content?>
     </div>
 
-    <?php if (strlen($btnsControls)) { ?>
+    <?php if (is_string($btnsControls) && strlen($btnsControls)) { ?>
     <div class="gotObject formCtrls form-group row " <?=$dataWidthBTctrls?> data-display="<?=$display?>">
         <?=$btnsControls?>
     </div>
