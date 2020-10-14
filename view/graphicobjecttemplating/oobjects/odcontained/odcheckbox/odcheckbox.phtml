@@ -1,6 +1,8 @@
 <?php
 // template de l'objet ODCheckbox
 
+use GraphicObjectTemplating\OObjects\ODContained\ODCheckbox;
+
 $id = $this->objet['id'];
 $classes = $this->objet['classes'];
 $object = $this->objet['object'];
@@ -17,87 +19,136 @@ $inputWidthBT = $this->objet['inputWidthBT'];
 $options = $this->objet['options'];
 $checkLabelWidthBT = $this->objet['checkLabelWidthBT'];
 $checkInputWidthBT = $this->objet['checkInputWidthBT'];
+$value = $this->objet['value'];
 
-$objClasses = 'gotObject hidden '.$id.' '.$classes;
+$objClasses = 'gotObject hidden ' . $id . ' ' . $classes;
 
 ?>
-<div id="<?=$id?>>" data-objet="<?=$object?>>" class="<?=$objClasses?>"
-<?php if ($state == false) { ?> checkbox disabled <?php } ?>
-<?php if (!empty($display)) { ?> data-display="<?=$display?>" <?php } ?>
-<?php if (!empty($widthBT)) { ?> data-widthbt="<?=$widthBT?>" <?php } ?>
-<?php if (!empty($form)) { ?> data-form="<?=$form?>" <?php } ?>
-<?php if ($state == false) { ?>  disabled <?php } ?> <?php if (!empty($event)) { ?> checkboxCback <?php } ?>
-<?php if ($event) {
-    require_once __DIR__."/../../../../graphicobjecttemplating/oobjects/eventsHTML.phtml";
-    setEvents($event);
-} ?>
+<div id="<?= $id ?>>" data-objet="<?= $object ?>>" class="<?= $objClasses ?>"
+    <?php if ($state == false) { ?> checkbox disabled <?php } ?>
+    <?php if (!empty($display)) { ?> data-display="<?= $display ?>" <?php } ?>
+    <?php if (!empty($widthBT)) { ?> data-widthbt="<?= $widthBT ?>" <?php } ?>
+    <?php if (!empty($form)) { ?> data-form="<?= $form ?>" <?php } ?>
+    <?php if ($state == false) { ?>  disabled <?php } ?> <?php if (!empty($event)) { ?> checkboxCback <?php } ?>
+    <?php if ($event) {
+        require_once __DIR__ . "/../../../../graphicobjecttemplating/oobjects/eventsHTML.phtml";
+        setEvents($event);
+    } ?>
 >
     <style>
-        <?php if ($placement === "right") { ?> #<?=$id?> label { padding-left: 2em; } <?php } ?>
+        <?php if ($placement === "right") { ?>
+        #<?=$id?> label {
+            padding-left: 2em;
+        }
+        <?php } ?>
 
-        #<?=$id?> input {
-                            position: relative !important;
-                            margin: 0 5px !important;
-                            top: -1px;
-                        }
+        # <?=$id?> input {
+            position: relative !important;
+            margin: 0 5px !important;
+            top: -1px;
+        }
 
         #<?=$id?> div label {
-                            position: relative;
-                            top: -0.3em;
-        <?php if (count($options) == 1) { ?>
-        font-weight: bold;
-        <?php } ?>
+            position: relative;
+            top: -0.3em;
+            <?php if (count($options) == 1) { ?>
+            font-weight: bold;
+            <?php } ?>
         }
     </style>
     <?php if (!empty($label)) { ?>
-    <label <?php if (!empty($labelWidthBT)) { ?> data-widthbt="{{ objet.labelWidthBT }}" <?php } ?>
-           style="float: left;">
-        <?=$label?>
-    </label>
+        <label <?php if (!empty($labelWidthBT)) { ?> data-widthbt="<?=$labelWidthBT?>" <?php } ?>
+            style="float: left;">
+            <?=$label?>
+        </label>
     <?php } ?>
     <div class="checkboxes" style="float: left;"
-        <?php if (!empty($label)) { ?>
-            <?php if (!empty($inputWidthBT)) { ?> data-widthbt="{{ objet.inputWidthBT }}" <?php } ?>
-         <?php } ?>
+        <?php if (!empty($label) && !empty($inputWidthBT)) { ?>
+        data-widthbt="<?=$inputWidthBT?>"
+        <?php } ?>
     >
         <?php $loop = -1 ?>
-        <?php foreach($options as $option) {
-            $loop += 1; ?>
-        <div class="<?=$option['type']?> <?php if (count($options) == 1){?>col-lg-12 col-md-12 col-sm-12 col-xs-12<?php } ?>">
-            <?php if ($placement !== "right") {?>
-            <label for="<?=$id?><?=$loop?>"
-                    <?php if (count($options) == 1 and !empty($labelWidthBT)) { ?> data-widthbt="<?=$labelWidthBT?>" <?php } ?>
-                    <?php if (count($options) > 1 and !empty($checkLabelWidthBT)) { ?> data-widthbt="<?=$checkLabelWidthBT?>" <?php } ?>
-                style="text-align: center">
-                <?=$option['libel']?>
-            </label>
-            <?php } ?>
-            <input id="<?=$id?><?=$loop?>" type="checkbox" value="{{ options.value }}"
+        <?php foreach ($options as $option) {
+            $loop += 1;
+            if ($option['type'] === ODCheckbox::CHECKTYPE_CHECKBOX) { ?>
+            <div class="<?=$option['nature']?>
+                <?php if (count($options) === 1) { ?>col-lg-12 col-md-12 col-sm-12 col-xs-12<?php } ?>">
+                <?php if ($placement !== "right") { ?>
+                    <label for="<?=$id?><?=$loop?>"
+                        <?php if (count($options) == 1 and !empty($labelWidthBT)) { ?>
+                            data-widthbt="<?=$labelWidthBT?>"
+                        <?php } ?>
+                        <?php if (count($options) > 1 and !empty($checkLabelWidthBT)) { ?>
+                            data-widthbt="<?=$checkLabelWidthBT?>"
+                        <?php } ?>
+                        style="text-align: center">
+                        <?=$option['libel']?>
+                    </label>
+                <?php } ?>
+                <input id="<?=$id?><?=$loop?>" type="checkbox" value="<?=$value?>"
                     <?php if ($option['state'] === false or $state === false) { ?> disabled <?php } ?>
                     <?php if ($options['check'] === 'check') { ?>checked <?php } ?>
-            <?php if (count($options) === 1 and !empty($inputWidthBT)) { ?> data-widthbt="<?=$inputWidthBT?>" <?php } ?>
-            <?php if (count($options) > 1 and !empty($checkInputWidthBT)) { ?> data-widthbt="<?=$checkInputWidthBT?>" <?php } ?>
-            >
-            <?php if ($placement == "right") { ?>
-            <label for="<?=$id?><?=$loop?>"
-                <?php if (count($options) === 1 and !empty($labelWidthBT)) { ?> data-widthbt="<?=$labelWidthBT?>" <?php } ?>
-                <?php if (count($options) > 1 and !empty($checkLabelWidthBT)) { ?> data-widthbt="<?=$checkLabelWidthBT?>" <?php } ?>
-                style="text-align: center">
-                <?=$option['libel']?>
-            </label>
+                    <?php if (count($options) === 1 and !empty($inputWidthBT)) { ?>
+                        data-widthbt="<?=$inputWidthBT?>"
+                    <?php } ?>
+                    <?php if (count($options) > 1 and !empty($checkInputWidthBT)) { ?>
+                        data-widthbt="<?=$checkInputWidthBT?>"
+                       <?php } ?>
+                >
+                <?php if ($placement === "right") { ?>
+                    <label for="<?= $id ?><?= $loop ?>"
+                        <?php if (count($options) === 1 and !empty($labelWidthBT)) { ?>
+                            data-widthbt="<?= $labelWidthBT ?>"
+                        <?php } ?>
+                        <?php if (count($options) > 1 and !empty($checkLabelWidthBT)) { ?>
+                            data-widthbt="<?= $checkLabelWidthBT ?>"
+                        <?php } ?>
+                        style="text-align: center">
+                        <?= $option['libel'] ?>
+                    </label>
+                <?php } ?>
+            </div>
+            <?php } elseif ($option['type'] === ODCheckbox::CHECKTYPE_SWITCH) {?>
+                <div class="switch">
+                    <style>
+                        .switch label input[type="checkbox"]:checked+.lever {
+                            background-color: #<?=$option['backgrYes']?>;
+                        }
+
+                        .switch label input[type="checkbox"]:checked+.lever:after {
+                            left: 1.5rem;
+                            background-color: #<?=$option['natureYes']?>;
+                        }
+
+                        .switch label .lever {
+                            background-color: #<?=$option['backgrNo']?>;
+                        }
+
+                        .switch label .lever:after {
+                            background-color: #<?=$option['natureNo']?>;
+                        }
+                    </style>
+                    <label>
+                        <?=$option['libelNo']?>
+                        <input type="checkbox" checked>
+                        <span class="lever"></span> <?=$option['libelYes']?>
+                    </label>
+                </div>
             <?php } ?>
-        </div>
         <?php } ?>
     </div>
 
-    <script id="<?=$id?>Script" type="text/javascript">
-        $("#<?=$id?> label").each(function () { setBtClasses($(this), $(this).data("widthbt")); });
-        $("#<?=$id?> input").each(function () { setBtClasses($(this), $(this).data("widthbt")); });
+    <script id="<?= $id ?>Script" type="text/javascript">
+        $("#<?=$id?> label").each(function () {
+            setBtClasses($(this), $(this).data("widthbt"));
+        });
+        $("#<?=$id?> input").each(function () {
+            setBtClasses($(this), $(this).data("widthbt"));
+        });
 
         <?php if (!empty($this->objet['event'])) {
-            require_once __DIR__."/../../../../graphicobjecttemplating/oobjects/eventsJS.phtml";
+            require_once __DIR__ . "/../../../../graphicobjecttemplating/oobjects/eventsJS.phtml";
             setOnEvents($this->objet['event'], $this->objet);
         }?>
     </script>
 </div>
-
