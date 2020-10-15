@@ -24,7 +24,7 @@ $value = $this->objet['value'];
 $objClasses = 'gotObject hidden ' . $id . ' ' . $classes;
 
 ?>
-<div id="<?= $id ?>>" data-objet="<?= $object ?>>" class="<?= $objClasses ?>"
+<div id="<?=$id?>" data-objet="<?=$object?>" class="<?=$objClasses?>"
     <?php if ($state == false) { ?> checkbox disabled <?php } ?>
     <?php if (!empty($display)) { ?> data-display="<?= $display ?>" <?php } ?>
     <?php if (!empty($widthBT)) { ?> data-widthbt="<?= $widthBT ?>" <?php } ?>

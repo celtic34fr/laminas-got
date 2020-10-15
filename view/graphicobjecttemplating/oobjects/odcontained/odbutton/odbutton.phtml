@@ -64,6 +64,12 @@ if (!empty($event) && $type !== ODButton::BUTTONTYPE_LINK) {
     }
 
     if ($pathFile) {
+        echo ".".$id." .ico-custom { ";
+        echo "  display:block;";
+        echo "  background:black;";
+        echo "  color:white;";
+        echo "  text-decoration:none;";
+        echo "}";
         echo '.'.$id." .ico-custom:before{ ";
         echo "    content: ''; ";
         echo '    background: url("'.$pathFile.'"); ';
@@ -107,8 +113,8 @@ if ($icon) {
 
 ?>
 
-<div id="<?= $id ?>" data-objet="<?= $object ?>" class="<?= $objClasses ?>"
-     data-role="<?= $type ?>"
+<div id="<?=$id?>" data-objet="<?=$object?>" class="<?=$objClasses?>"
+     data-role="<?=$type?>"
      data-default="
     <?php
      if ($default === false) { ?>false<?php } elseif ($default === true) { ?>true<?php } else {

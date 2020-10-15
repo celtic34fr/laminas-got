@@ -35,11 +35,13 @@ if ($form) {
     $objClasses .= " form-group row ";
 }
 foreach ($events as $evt => $event) {
-    if ($evt === ODInput::EVENT_CHANGE) {
-        $objClasses .= " inputChg ";
-    }
-    if ($evt === ODInput::EVENT_KEYUP) {
-        $objClasses .= " inputKup ";
+    switch ($evt) {
+        case ODInput::EVENT_CHANGE:
+            $objClasses .= " inputChg ";
+            break;
+        case ODInput::EVENT_KEYUP:
+            $objClasses .= " inputKup ";
+            break;
     }
 }
 ?>
@@ -146,6 +148,13 @@ foreach ($events as $evt => $event) {
                 }
             });
             <?php
+            }
+
+            if (!empty($mask)) {?> $("#<?= $id ?> input").mask("<?= $mask ?>"); <?php }
+
+            if ($autoFocus) {
+                require_once __DIR__."/../../../../graphicobjecttemplating/oobjects/autoFocus.phtml";
+                setAutoFocus($this->objet['id']);
             }
 
             if (!empty($this->objet['event'])) {

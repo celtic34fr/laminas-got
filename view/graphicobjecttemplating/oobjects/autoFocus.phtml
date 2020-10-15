@@ -1,0 +1,6 @@
+<?php
+function setAutoFocus($id) {
+    $autoFocus = "setTimeout(function obj_method(){";
+    $autoFocus .= "$(".$id.").focus()},50)";
+    echo $autoFocus;
+}
