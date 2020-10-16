@@ -1,0 +1,69 @@
+<?php
+
+function formatWidthBT($val) {
+    if (!empty($val)) {
+        $lxs = $lsm = $lmd = $llg = 0;
+        $ixs = $ism = $imd = $ilg = 0;
+
+        switch (true) {
+            case (is_numeric($val) and (int)$val <= 12):
+                $lxs = $lsm = $lmd = $llg = (int)$val;
+                $ixs = $ism = $imd = $ilg = 12 - (int)$val;
+                break;
+            default:
+                foreach (explode(':', $val) as $item) {
+                    $key = strtoupper($item);
+                    switch (substr($key, 0, 2)) {
+                        case 'WL':
+                            $llg = (int)substr($key, 2);
+                            break;
+                        case 'WM':
+                            $lmd = (int)substr($key, 2);
+                            break;
+                        case 'WS':
+                            $lsm = (int)substr($key, 2);
+                            break;
+                        case 'WX':
+                            $lxs = (int)substr($key, 2);
+                            break;
+                        case 'OL':
+                            $ilg = (int)substr($key, 2);
+                            break;
+                        case 'OM':
+                            $imd = (int)substr($key, 2);
+                            break;
+                        case 'OS':
+                            $ism = (int)substr($key, 2);
+                            break;
+                        case 'OX':
+                            $ixs = (int)substr($key, 2);
+                            break;
+                        default:
+                            switch ($key[0]) {
+                                case 'W':
+                                    $llg = (int)substr($key, 1);
+                                    $lmd = $lsm = $lxs = $llg;
+                                    break;
+                                case 'O':
+                                    $ilg = (int)substr($key, 1);
+                                    $imd = $ism = $ixs = $ilg;
+                                    break;
+                            }
+                            break;
+                    }
+                }
+                break;
+        }
+
+        if ($llg > 0) echo 'col-lg-'.$llg.' ';
+        if ($lmd > 0) echo 'col-md-'.$llg.' ';
+        if ($lsm > 0) echo 'col-sm-'.$llg.' ';
+        if ($lxs > 0) echo 'col-xs-'.$llg.' ';
+
+        if ($ilg > 0) echo 'offset-lg-'.$ilg.' ';
+        if ($imd > 0) echo 'offset-md-'.$imd.' ';
+        if ($ism > 0) echo 'offset-sm-'.$ism.' ';
+        if ($ixs > 0) echo 'offset-xs-'.$ixs.' ';
+
+    }
+}
