@@ -57,7 +57,7 @@ function formatStyles(array $stylesTab, string $id) {
 
 ?>
 
-<div id="<?= $id ?>" class="<=?objClasses?>" data-objet="<?= $object ?>" data-display="<?= $display ?>"
+<div id="<?= $id ?>" class="<?=$objClasses?>" data-objet="<?= $object ?>" data-display="<?= $display ?>"
      data-widthbt="<?= $widthBT ?>"
     <?php if ($event) {
         require_once __DIR__ . "/../../../../graphicobjecttemplating/oobjects/eventsHTML.phtml";
@@ -75,23 +75,22 @@ function formatStyles(array $stylesTab, string $id) {
             }
         } ?>
 
-        div#<?=$id?> table,
-        div#<?=$id?> table tr,
         div#<?=$id?> table tr td,
         div#<?=$id?> table tr th {
-            border: 1px solid black;
-            border-collapse: collapse;
+            padding: 0.2em;
         }
 
-        div#<?=$id?> table tr td,
-        div#<?=$id?> table tr th {
-            padding: 0.3em;
-        }
-
-        <?php $loop = -1 ?>
+        <?php $loop = 0 ?>
+        <?php $is_widthBT = false ?>
         <?php foreach($cols as $col) {
-            $loop += 1; ?>
+            $is_widthBT = $is_widthBT || array_key_exists('widthBT', $col);
+            if (array_key_exists('width', $col) && !array_key_exists('widthBT', $col)) {
+                $loop += 1; ?>
         div#<?=$id?> table .cno<?=$loop?> { width: <?=$col['width']?> }
+            <?php } ?>
+        <?php }
+        if ($loop === 0 && !$is_widthBT) { ?>
+        div#<?=$id?> table .col { width: <?=100/count($cols)?>%}
         <?php } ?>
 
         td .BAright {
@@ -110,14 +109,16 @@ function formatStyles(array $stylesTab, string $id) {
             top: 0 !important;
             left: 0 !important;
         }
+
+        .table-bordered td, .table-bordered th { border-color: #c7c0c0; }
     </style>
-    <table id="<?= $id ?>_table" class="lno0 cno0 <?= $objClasses ?>" data-lno="0" data-cno="0">
+    <table id="<?= $id ?>_table" class="lno0 cno0 table-bordered" data-lno="0" data-cno="0">
         <thead class="<?= $id ?>Head">
-        <tr class="line">
-            <?php foreach ($cols as $col) {
+        <tr class="line d-flex">
+            <?php $loop = 0;
+            foreach ($cols as $col) {
                 $LwidthBT = array_key_exists('widthBT', $col) ? $col['widthBT'] : '';
                 $Lwidth = array_key_exists('width', $col) ? $col['width'] : '';
-                $loop = -1;
                 if ($col['view'] === true) {
                     $loop += 1;
                     $classTd = "col cno".$loop;
@@ -137,16 +138,16 @@ function formatStyles(array $stylesTab, string $id) {
         </tr>
         </thead>
         <tbody class="<?= $id ?>">
-        <tr class="line nodata <?php if (count($datas) > 0) { ?>hide<?php } ?>">
+        <tr class="line nodata d-flex <?php if (count($datas) > 0) { ?>hide<?php } ?>">
             <?php $colspan = count($cols); ?>
-            <td colspan="<?= $colspan ?>" style="text-align: center">No data to show</td>
+            <td colspan="<?= $colspan ?>" class="<?=formatWidthBT(12)?>" style="text-align: center">No data to show</td>
         </tr>
         <?php if (count($datas) > 0) {
             foreach ($datas as $lno => $data) {
                 if ($datas['view'] === true) {
                     $key = 'line' . $lno;
                     $data0 = $data[0]; ?>
-                    <tr class="line lno<?= $lno ?>" data-lno="<?= $lno ?>">
+                    <tr class="line d-flex lno<?= $lno ?>" data-lno="<?= $lno ?>">
                         <?php foreach ($data as $cno => $col) {
                             if ($cno > 0) {
                                 if ($cols[$cno]['view'] === true) {

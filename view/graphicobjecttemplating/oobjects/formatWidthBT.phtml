@@ -2,13 +2,14 @@
 
 function formatWidthBT($val) {
     if (!empty($val)) {
+        $classes = "";
         $lxs = $lsm = $lmd = $llg = 0;
         $ixs = $ism = $imd = $ilg = 0;
 
         switch (true) {
             case (is_numeric($val) and (int)$val <= 12):
                 $lxs = $lsm = $lmd = $llg = (int)$val;
-                $ixs = $ism = $imd = $ilg = 12 - (int)$val;
+//                $ixs = $ism = $imd = $ilg = 12 - (int)$val;
                 break;
             default:
                 foreach (explode(':', $val) as $item) {
@@ -55,15 +56,16 @@ function formatWidthBT($val) {
                 break;
         }
 
-        if ($llg > 0) echo 'col-lg-'.$llg.' ';
-        if ($lmd > 0) echo 'col-md-'.$llg.' ';
-        if ($lsm > 0) echo 'col-sm-'.$llg.' ';
-        if ($lxs > 0) echo 'col-xs-'.$llg.' ';
+        if ($llg > 0) $classes .= 'col-lg-'.$llg.' ';
+        if ($lmd > 0) $classes .= 'col-md-'.$llg.' ';
+        if ($lsm > 0) $classes .= 'col-sm-'.$llg.' ';
+        if ($lxs > 0) $classes .= 'col-xs-'.$llg.' ';
 
-        if ($ilg > 0) echo 'offset-lg-'.$ilg.' ';
-        if ($imd > 0) echo 'offset-md-'.$imd.' ';
-        if ($ism > 0) echo 'offset-sm-'.$ism.' ';
-        if ($ixs > 0) echo 'offset-xs-'.$ixs.' ';
+        if ($ilg > 0) $classes .= 'offset-lg-'.$ilg.' ';
+        if ($imd > 0) $classes .= 'offset-md-'.$imd.' ';
+        if ($ism > 0) $classes .= 'offset-sm-'.$ism.' ';
+        if ($ixs > 0) $classes .= 'offset-xs-'.$ixs.' ';
 
+        return $classes;
     }
 }
