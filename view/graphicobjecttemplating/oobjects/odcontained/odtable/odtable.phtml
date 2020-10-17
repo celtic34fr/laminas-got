@@ -1,4 +1,7 @@
 <?php
+
+use GraphicObjectTemplating\OObjects\ODContained\ODTable;
+
 $id = $this->objet['id'];
 $object = $this->objet['object'];
 $display = $this->objet['display'];
@@ -9,6 +12,9 @@ $datas = $this->objet['datas'];
 $events = $this->objet['events'];
 $event = $this->objet['event'];
 $styles = $this->objet['styles'];
+$title = $this->objet['title'];
+$titlePos = $this->objet['titlePos'];
+$titleStyle = $this->objet['titleStyle'];
 
 $objClasses = 'gotObject hidden ' . $id . " " . $classes;
 
@@ -111,8 +117,49 @@ function formatStyles(array $stylesTab, string $id) {
         }
 
         .table-bordered td, .table-bordered th { border-color: #c7c0c0; }
+
+        table caption {
+            text-decoration: #666666;
+            font-style: italic;
+        <?php
+        if (!empty($title) && !empty($titlePos)) {
+            switch ($titlePos) {
+                case ODTable::TABLETITLEPOS_BOTTOM_CENTER:
+                    echo "caption-side: bottom;";
+                    echo "text-align: center;";
+                    break;
+                case ODTable::TABLETITLEPOS_BOTTOM_LEFT:
+                    echo "caption-side: bottom;";
+                    echo "text-align: left;";
+                    break;
+                case ODTable::TABLETITLEPOS_BOTTOM_RIGHT:
+                    echo "caption-side: bottom;";
+                    echo "text-align: right;";
+                    break;
+                case ODTable::TABLETITLEPOS_TOP_CENTER:
+                    echo "caption-side: top;";
+                    echo "text-align: center;";
+                    break;
+                case ODTable::TABLETITLEPOS_TOP_LEFT:
+                    echo "caption-side: top;";
+                    echo "text-align: left;";
+                    break;
+                case ODTable::TABLETITLEPOS_TOP_RIGHT:
+                    echo "caption-side: top;";
+                    echo "text-align: right;";
+                    break;
+            }
+        }
+        if (!empty($titleStyle)) {
+            echo $titleStyle;
+        }
+        ?>
+        }
     </style>
     <table id="<?= $id ?>_table" class="lno0 cno0 table-bordered" data-lno="0" data-cno="0">
+        <?php if (!empty($title)) {?>
+        <caption><?=$title?></caption>
+        <?php } ?>
         <thead class="<?= $id ?>Head">
         <tr class="line d-flex">
             <?php $loop = 0;
