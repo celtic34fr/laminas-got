@@ -15,6 +15,9 @@ $styles = $this->objet['styles'];
 $title = $this->objet['title'];
 $titlePos = $this->objet['titlePos'];
 $titleStyle = $this->objet['titleStyle'];
+$btnsActions = $this->objet['btnsActions'];
+$btnsActionsPos = $this->objet['btnsActionsPos'];
+$btnsActionsHidden = $this->objet['btnsActionsHidden'];
 
 $objClasses = 'gotObject hidden ' . $id . " " . $classes;
 
@@ -50,12 +53,13 @@ function formatEvents(array $evtsTabs, string $id, string $object)
     return $formatedEvents;
 }
 
-function formatStyles(array $stylesTab, string $id) {
+function formatStyles(array $stylesTab, string $id)
+{
     $formatedStyles = [];
     foreach ($stylesTab as $noLine => $params) {
         foreach ($params as $noCol => $item) {
             $formatedSelector = "#" . $id . (((int)$noLine > 0) ? ' lno' . (int)$noLine : '') . (((int)$noCol > 0) ? ' cno' . (int)$noCol : '');
-            $formatedStyles[] = $formatedSelector . " {" .$item. " }";
+            $formatedStyles[] = $formatedSelector . " {" . $item . " }";
         }
     }
     return $formatedStyles;
@@ -63,7 +67,7 @@ function formatStyles(array $stylesTab, string $id) {
 
 ?>
 
-<div id="<?= $id ?>" class="<?=$objClasses?>" data-objet="<?= $object ?>" data-display="<?= $display ?>"
+<div id="<?= $id ?>" class="<?= $objClasses ?>" data-objet="<?= $object ?>" data-display="<?= $display ?>"
      data-widthbt="<?= $widthBT ?>"
     <?php if ($event) {
         require_once __DIR__ . "/../../../../graphicobjecttemplating/oobjects/eventsHTML.phtml";
@@ -92,11 +96,17 @@ function formatStyles(array $stylesTab, string $id) {
             $is_widthBT = $is_widthBT || array_key_exists('widthBT', $col);
             if (array_key_exists('width', $col) && !array_key_exists('widthBT', $col)) {
                 $loop += 1; ?>
-        div#<?=$id?> table .cno<?=$loop?> { width: <?=$col['width']?> }
-            <?php } ?>
+        div#<?=$id?> table .cno<?=$loop?> {
+            width: <?=$col['width']?>
+        }
+
+        <?php } ?>
         <?php }
         if ($loop === 0 && !$is_widthBT) { ?>
-        div#<?=$id?> table .col { width: <?=100/count($cols)?>%}
+        div#<?=$id?> table .col {
+            width: <?=100/count($cols)?>%
+        }
+
         <?php } ?>
 
         td .BAright {
@@ -116,7 +126,9 @@ function formatStyles(array $stylesTab, string $id) {
             left: 0 !important;
         }
 
-        .table-bordered td, .table-bordered th { border-color: #c7c0c0; }
+        .table-bordered td, .table-bordered th {
+            border-color: #c7c0c0;
+        }
 
         table caption {
             text-decoration: #666666;
@@ -157,8 +169,8 @@ function formatStyles(array $stylesTab, string $id) {
         }
     </style>
     <table id="<?= $id ?>_table" class="lno0 cno0 table-bordered" data-lno="0" data-cno="0">
-        <?php if (!empty($title)) {?>
-        <caption><?=$title?></caption>
+        <?php if (!empty($title)) { ?>
+            <caption><?= $title ?></caption>
         <?php } ?>
         <thead class="<?= $id ?>Head">
         <tr class="line d-flex">
@@ -168,26 +180,33 @@ function formatStyles(array $stylesTab, string $id) {
                 $Lwidth = array_key_exists('width', $col) ? $col['width'] : '';
                 if ($col['view'] === true) {
                     $loop += 1;
-                    $classTd = "col cno".$loop;
+                    $classTd = "col cno" . $loop;
                     $styleTD = "";
                     if (!empty($LwidthBT) && empty($Lwidth)) {
-                        $classTd .= ' '.formatWidthBT($LwidthBT);
+                        $classTd .= ' ' . formatWidthBT($LwidthBT);
                     } elseif (!empty($Lwidth) && empty($LwidthBT)) {
-                        $styleTd = 'width: '.$Lwidth;
+                        $styleTd = 'width: ' . $Lwidth;
                     }
-                    $libel = trim($col['libel']) ?>
-                    <th class="<?=$classTd?>" data-col="<?=$loop?>"
-                        <?php if (!empty($styleTd)) {?>style="<?=$styleTD?>"<?php } ?> >
+                    $libel = trim($col['libel']);
+                    if (!empty($btnsActions) && $btnsActionsPos === $loop) { ?>
+                    <th class="actions" data-lno="0">Actions</th>
+                    <?php } ?>
+                    <th class="<?= $classTd ?>" data-col="<?= $loop ?>"
+                        <?php if (!empty($styleTd)) { ?>style="<?= $styleTD ?>"<?php } ?> >
                         <?= $libel ?>
                     </th>
                 <?php } ?>
             <?php } ?>
+            <?php if (!empty($btnsActions) && $btnsActionsPos > count($cols)) { ?>
+                <th class="actions" data-lno="0">Actions</th>
+            <?php } ?>
         </tr>
         </thead>
-        <tbody class="<?= $id ?>">
+        <tbody class="<?= $id ?>Boby">
         <tr class="line nodata d-flex <?php if (count($datas) > 0) { ?>hide<?php } ?>">
             <?php $colspan = count($cols); ?>
-            <td colspan="<?= $colspan ?>" class="<?=formatWidthBT(12)?>" style="text-align: center">No data to show</td>
+            <td colspan="<?= $colspan ?>" class="<?= formatWidthBT(12) ?>" style="text-align: center">No data to show
+            </td>
         </tr>
         <?php if (count($datas) > 0) {
             foreach ($datas as $lno => $data) {
@@ -198,12 +217,23 @@ function formatStyles(array $stylesTab, string $id) {
                         <?php foreach ($data as $cno => $col) {
                             if ($cno > 0) {
                                 if ($cols[$cno]['view'] === true) {
+                                    if ($btnsActionsPos === $cno) { ?>
+                                        <td class="actions" data-lno="<?= $lno ?>"
+                                            data-hidden="<?= $btnsActionsHidden[$lno] ?? '' ?>"
+                                        ></td>
+                                    <?php }
                                     $col = trim($col);
                                     $key = 'col' . $cno; ?>
                                     <td class="col cno<?= $cno ?>" data-cno="<?= $cno ?>"><?= $col ?></td>
                                 <?php }
                             }
-                        } ?>
+                        }
+                        if ($btnsActionsPos > count($data) && $cno > 0) { ?>
+                            <td class="actions" data-lno="<?= $lno ?>"
+                                data-hidden="<?= $btnsActionsHidden[$lno] ?? '' ?>"
+                            ></td>
+                        <?php }
+                        ?>
                     </tr>
                 <?php } ?>
             <?php } ?>
@@ -211,18 +241,45 @@ function formatStyles(array $stylesTab, string $id) {
         </tbody>
     </table>
 
+    <div id="<?= $id ?>BtnsAction" style="display: none;">
+        <?= $btnsActions ?>
+    </div>
+
     <script id="<?= $id ?>Script">
+        function transcodeBtnsActions() {
+            var btnsActions = $.map($("#<?=$id?>BtnsActions [id]"), function (n, i) {
+                return n.id;
+            });
+            $.each(eltSelection, function (i, selection) {
+                var hidden = selection.getAttribute('data-hidden');
+            .
+                split('|');
+                var lno = selection.getAttribute('data-lno');
+                btnsActions.each(function (idx) {
+                    if (!$.inArray(idx, hidden)) {
+                        $("#" + idx)
+                            .clone()
+                            .prop('id', idx + lno)
+                            .appendTo("#" + selection.id)
+                        ;
+                    }
+                })
+            }
+        }
+
         <?php if (!empty($events)) {
             foreach (formatEvents($events, $id, $object) as $formatEvent) {
                 echo $formatEvent;
             }
         } ?>
 
-        <?php if (!empty($event)) { ?>
         $(document).ready(function (e) { <?php
-            require_once __DIR__ . "/../../../../graphicobjecttemplating/oobjects/eventsJS.phtml";
-            setOnEvents($event, $this->objet);
-            ?> });
-        <?php } ?>
+            if (!empty($event)) {
+                require_once __DIR__ . "/../../../../graphicobjecttemplating/oobjects/eventsJS.phtml";
+                setOnEvents($event, $this->objet);
+            } ?>
+
+            transcodeBtnsActions();
+        });
     </script>
-</div>
+</div>-

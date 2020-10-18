@@ -3,6 +3,7 @@
 namespace LaminasGOT\Service;
 
 
+use GraphicObjectTemplating\OObjects\ODContained\ODTable;
 use GraphicObjectTemplating\OObjects\OTInfoBulle;
 use GraphicObjectTemplating\OObjects\OObject;
 use GraphicObjectTemplating\OObjects\OSContainer\OSForm;
@@ -99,7 +100,7 @@ class LF3GotServices
     {
         $properties = $object->properties;
         $html = new ViewModel();
-        $template = $properties['template'].'.'.$this->_config['gotParameters']['template_ext'];
+        $template = $properties['template'] . '.' . $this->_config['gotParameters']['template_ext'];
         $renduHtml = '';
 
 //        if (isset($object->infoBulle) && $object->infoBulle instanceof OTInfoBulle) {
@@ -109,6 +110,14 @@ class LF3GotServices
         switch ($properties['typeObj']) {
             case 'odcontained' :
             case 'oedcontained':
+                switch (true) { // tratitement spécificités objets ODContained
+                    case ($object instanceof ODTable):
+                        /** traitement des boutons en de formulaire */
+                        if ($properties['btnsActions']->haschild()) {
+                            $properties['btnsActions'] = $this->render_html($properties['btnsActions']);
+                        }
+                        break;
+                }
                 $html->setTemplate($template);
                 $html->setVariable('objet', $properties);
                 $html->setVariable('id', $properties['id']);
@@ -125,11 +134,13 @@ class LF3GotServices
                         $content .= $rendu;
                     }
                 }
-                if ($object instanceof OSForm) {
-                    /** traitement des boutons en de formulaire */
-                    if ($properties['btnsControls']->haschild()) {
-                        $properties['btnsControls'] = $this->render_html($properties['btnsControls']);
-                    }
+                switch (true) {// tratitement spécificités objets OSContainer
+                    case ($object instanceof OSForm):
+                        /** traitement des boutons en de formulaire */
+                        if ($properties['btnsControls']->haschild()) {
+                            $properties['btnsControls'] = $this->render_html($properties['btnsControls']);
+                        }
+                        break;
                 }
                 $html->setTemplate($template);
                 $html->setVariable('objet', $properties);
@@ -188,7 +199,7 @@ class LF3GotServices
         $view = new ViewModel();
         $ext = $this->_config['gotParameters']['template_ext'];
         $view->setTemplate(
-            'graphicobjecttemplating/main/got-header.'.$ext);
+            'graphicobjecttemplating/main/got-header.' . $ext);
         $view->setVariable('scripts',
             ['css' => $rscs['css'] ?? [], 'js' => $rscs['js'] ?? [], 'font' => $rscs['fonts'] ?? []]);
 
@@ -276,7 +287,7 @@ class LF3GotServices
      * @param array $rscs
      * @param OObject $var
      */
-    private function format_rscs(array $rscs, OObject $var) : array
+    private function format_rscs(array $rscs, OObject $var): array
     {
         foreach ($rscs as $type => $array_link) {
             foreach ($array_link as $key => $link) {
@@ -303,10 +314,10 @@ class LF3GotServices
      * @param null $code
      * @return array
      */
-    public function formatRetour($idSource, $idCible, $mode, $code = null) : array
+    public function formatRetour($idSource, $idCible, $mode, $code = null): array
     {
         if (empty($idCible)) $idCible = $idSource;
-        $occurence = ['idSource'=>$idSource, 'idCible'=>$idCible, 'mode'=>$mode, 'code'=>$code];
+        $occurence = ['idSource' => $idSource, 'idCible' => $idCible, 'mode' => $mode, 'code' => $code];
         return [$occurence];
     }
 }
