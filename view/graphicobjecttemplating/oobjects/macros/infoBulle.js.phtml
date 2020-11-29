@@ -5,7 +5,7 @@
  * infoBulle       : tableau de paramètrage du tooltip ou du popover
  **/
 
-use GraphicObjectTemplating\OObjects\OTInfoBulle;
+use GraphicObjectTemplating\OObjects\OSTech\OTInfoBulle;
 
 function setInfoBulle($infoBulle, $id) {
     $title   = ($infoBulle->type === OTInfoBulle::IBTYPE_TOOLTIP && !empty($infoBulle->content)) ? $infoBulle->content : '';

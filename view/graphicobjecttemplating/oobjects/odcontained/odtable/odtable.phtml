@@ -1,6 +1,5 @@
 <?php
-
-use GraphicObjectTemplating\OObjects\ODContained\ODTable;
+require_once __DIR__ . "/../../../../graphicobjecttemplating/oobjects/macros/formatWidthBT.phtml";
 
 $id = $this->objet['id'];
 $object = $this->objet['object'];
@@ -12,12 +11,21 @@ $datas = $this->objet['datas'];
 $events = $this->objet['events'];
 $event = $this->objet['event'];
 $styles = $this->objet['styles'];
-$title = $this->objet['title'];
-$titlePos = $this->objet['titlePos'];
-$titleStyle = $this->objet['titleStyle'];
-$btnsActions = $this->objet['btnsActions'];
-$btnsActionsPos = $this->objet['btnsActionsPos'];
-$btnsActionsHidden = $this->objet['btnsActionsHidden'];
+
+// traitement récupération largeurs de colonnes et absence de définition de largeurs de colonnes
+$colsWidth = array_key_exists('colsWidth', $this->objet) ? $this->objet['colsWidth'] : [];
+$colsWidthBT = array_key_exists('colsWidthBT', $this->objet) ? $this->objet['colsWidth'] : [];
+if (empty($colsWidth) && empty($colsWidthBT)) {
+    $width = 12 / count($cols);
+    $sum_width = 0;
+    for ($ind = 0, $indMax = count($cols); $ind < $indMax; $ind++) {
+        if ($ind == ($indMax - 1) and is_float($width)) {
+            $width = 12 - $sum_width;
+        }
+        $colsWidthBT[$ind] = (int)$width;
+        $sum_width += (int)$width;
+    }
+}
 
 $objClasses = 'gotObject hidden ' . $id . " " . $classes;
 
@@ -70,216 +78,104 @@ function formatStyles(array $stylesTab, string $id)
 <div id="<?= $id ?>" class="<?= $objClasses ?>" data-objet="<?= $object ?>" data-display="<?= $display ?>"
      data-widthbt="<?= $widthBT ?>"
     <?php if ($event) {
-        require_once __DIR__ . "/../../../../graphicobjecttemplating/oobjects/eventsHTML.phtml";
+        require_once __DIR__ . "/../../../../graphicobjecttemplating/oobjects/macros/eventsHTML.phtml";
         setEvents($event);
     } ?>
 >
     <style>
-        #<?=$id?>_table {
-            width: 100% !important;
-        }
 
-        <?php if (count($styles) > 0) {
-            foreach (formatStyles($styles, $id) as $formatStyle) {
-                echo $formatStyle;
+        <?php if (empty($colsWidthBT)) {
+            $loop = -1;
+            foreach ($colsWidth as $width) {
+                $loop++;
+                echo '.col'+$loop+' { width: '+$width+' !important; }';
             }
-        } ?>
-
-        div#<?=$id?> table tr td,
-        div#<?=$id?> table tr th {
-            padding: 0.2em;
-        }
-
-        <?php $loop = 0 ?>
-        <?php $is_widthBT = false ?>
-        <?php foreach($cols as $col) {
-            $is_widthBT = $is_widthBT || array_key_exists('widthBT', $col);
-            if (array_key_exists('width', $col) && !array_key_exists('widthBT', $col)) {
-                $loop += 1; ?>
-        div#<?=$id?> table .cno<?=$loop?> {
-            width: <?=$col['width']?>
-        }
-
-        <?php } ?>
-        <?php }
-        if ($loop === 0 && !$is_widthBT) { ?>
-        div#<?=$id?> table .col {
-            width: <?=100/count($cols)?>%
-        }
-
-        <?php } ?>
-
-        td .BAright {
-            float: right;
-            position: relative;
-            margin-left: 0.5em;
-        }
-
-        td .BAleft {
-            float: left;
-            position: relative;
-            margin-left: 0.5em;
-        }
-
-        .ico-custom:before {
-            top: 0 !important;
-            left: 0 !important;
-        }
-
-        .table-bordered td, .table-bordered th {
-            border-color: #c7c0c0;
-        }
-
-        table caption {
-            text-decoration: #666666;
-            font-style: italic;
-        <?php
-        if (!empty($title) && !empty($titlePos)) {
-            switch ($titlePos) {
-                case ODTable::TABLETITLEPOS_BOTTOM_CENTER:
-                    echo "caption-side: bottom;";
-                    echo "text-align: center;";
-                    break;
-                case ODTable::TABLETITLEPOS_BOTTOM_LEFT:
-                    echo "caption-side: bottom;";
-                    echo "text-align: left;";
-                    break;
-                case ODTable::TABLETITLEPOS_BOTTOM_RIGHT:
-                    echo "caption-side: bottom;";
-                    echo "text-align: right;";
-                    break;
-                case ODTable::TABLETITLEPOS_TOP_CENTER:
-                    echo "caption-side: top;";
-                    echo "text-align: center;";
-                    break;
-                case ODTable::TABLETITLEPOS_TOP_LEFT:
-                    echo "caption-side: top;";
-                    echo "text-align: left;";
-                    break;
-                case ODTable::TABLETITLEPOS_TOP_RIGHT:
-                    echo "caption-side: top;";
-                    echo "text-align: right;";
-                    break;
-            }
-        }
-        if (!empty($titleStyle)) {
-            echo $titleStyle;
-        }
-        ?>
-        }
+        }?>
     </style>
-    <table id="<?= $id ?>_table" class="lno0 cno0 table-bordered" data-lno="0" data-cno="0">
-        <?php if (!empty($title)) { ?>
-            <caption><?= $title ?></caption>
-        <?php } ?>
-        <thead class="<?= $id ?>Head">
-        <tr class="line d-flex">
-            <?php $loop = 0;
-            foreach ($cols as $col) {
-                $LwidthBT = array_key_exists('widthBT', $col) ? $col['widthBT'] : '';
-                $Lwidth = array_key_exists('width', $col) ? $col['width'] : '';
-                if ($col['view'] === true) {
-                    $loop += 1;
-                    $classTd = "col cno" . $loop;
-                    $styleTD = "";
-                    if (!empty($LwidthBT) && empty($Lwidth)) {
-                        $classTd .= ' ' . formatWidthBT($LwidthBT);
-                    } elseif (!empty($Lwidth) && empty($LwidthBT)) {
-                        $styleTd = 'width: ' . $Lwidth;
-                    }
-                    $libel = trim($col['libel']);
-                    if (!empty($btnsActions) && $btnsActionsPos === $loop) { ?>
-                    <th class="actions" data-lno="0">Actions</th>
-                    <?php } ?>
-                    <th class="<?= $classTd ?>" data-col="<?= $loop ?>"
-                        <?php if (!empty($styleTd)) { ?>style="<?= $styleTD ?>"<?php } ?> >
-                        <?= $libel ?>
-                    </th>
-                <?php } ?>
-            <?php } ?>
-            <?php if (!empty($btnsActions) && $btnsActionsPos > count($cols)) { ?>
-                <th class="actions" data-lno="0">Actions</th>
-            <?php } ?>
-        </tr>
-        </thead>
-        <tbody class="<?= $id ?>Boby">
-        <tr class="line nodata d-flex <?php if (count($datas) > 0) { ?>hide<?php } ?>">
-            <?php $colspan = count($cols); ?>
-            <td colspan="<?= $colspan ?>" class="<?= formatWidthBT(12) ?>" style="text-align: center">No data to show
-            </td>
-        </tr>
-        <?php if (count($datas) > 0) {
-            foreach ($datas as $lno => $data) {
-                if ($datas['view'] === true) {
-                    $key = 'line' . $lno;
-                    $data0 = $data[0]; ?>
-                    <tr class="line d-flex lno<?= $lno ?>" data-lno="<?= $lno ?>">
-                        <?php foreach ($data as $cno => $col) {
-                            if ($cno > 0) {
-                                if ($cols[$cno]['view'] === true) {
-                                    if ($btnsActionsPos === $cno) { ?>
-                                        <td class="actions" data-lno="<?= $lno ?>"
-                                            data-hidden="<?= $btnsActionsHidden[$lno] ?? '' ?>"
-                                        ></td>
-                                    <?php }
-                                    $col = trim($col);
-                                    $key = 'col' . $cno; ?>
-                                    <td class="col cno<?= $cno ?>" data-cno="<?= $cno ?>"><?= $col ?></td>
-                                <?php }
-                            }
-                        }
-                        if ($btnsActionsPos > count($data) && $cno > 0) { ?>
-                            <td class="actions" data-lno="<?= $lno ?>"
-                                data-hidden="<?= $btnsActionsHidden[$lno] ?? '' ?>"
-                            ></td>
-                        <?php }
-                        ?>
-                    </tr>
-                <?php } ?>
-            <?php } ?>
-        <?php } ?>
-        </tbody>
-    </table>
 
-    <div id="<?= $id ?>BtnsAction" style="display: none;">
-        <?= $btnsActions ?>
+    <!--    <div id="--><? //= $id ?><!--" class="-->
+    <? //= $objClasses ?><!-- ln0 cn0" data-lno="0" data-cno="0" data-display="--><? //= $display ?><!--">-->
+    <!--        <div class="thead">-->
+    <!--            <div class="d-flex">-->
+    <!--                <div class="col-sm-3">3 columns wide header</div>-->
+    <!--                <div class="col-sm-5">5 columns wide header</div>-->
+    <!--                <div class="col-sm-4">4 columns wide header</div>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--        <div class="tbody">-->
+    <!--            <div class="d-flex">-->
+    <!--                <div class="--><? //= formatWidthBTstr(3) ?><!--">3 columns wide content</div>-->
+    <!--                <div class="col-sm-5">5 columns wide content</div>-->
+    <!--                <div class="col-sm-4">4 columns wide content</div>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
+    <div id="<?= $id ?>_table" class="<?= $objClasses ?> lno0 cno0 table" data-lno="0" data-cno="0"
+         data-display="<?= $display ?>" data-widthbt="<?= $widthBT ?>">
+        <div class="<?= $id ?>Head thead">
+            <div class="line row">
+                <?php foreach ($cols as $col) {
+                    $loop = -1;
+                    if ($col['view'] === true) {
+                        $loop += 1;
+                        $classTd = "col cno" . $loop . ' ';
+                        if (empty($colsWidthBT)) {
+                            $classTd += ' col' + $loop;
+                        } else {
+                            $classTd .= formatWidthBTstr($colsWidthBT[$loop]);
+                        }
+                        $styleTD = "";
+                        $libel = trim($col['libel']) ?>
+                        <div class="<?= $classTd ?> th" data-col="<?= $loop ?>" scope="col"
+                            <?php if (!empty($styleTd)) { ?> style="<?= $styleTD ?>"
+                            <?php } ?> >
+                            <?= $libel ?>
+                        </div>
+                    <?php } ?>
+                <?php } ?>
+            </div>
+        </div>
+        <div class="<?= $id ?>TBody tbody">
+            <div class="line row nodata <?php if (count($datas) > 0) { ?>hide<?php } ?>">
+                <div style="text-align: center" class="<?=formatWidthBTstr(12)?> td">
+                    <span>No data to show</span>
+                </div>
+            </div>
+                <!--        --><?php //if (count($datas) > 0) {
+                //            foreach ($datas as $lno => $data) {
+                //                if ($datas['view'] === true) {
+                //                    $key = 'line' . $lno;
+                //                    $data0 = $data[0]; ?>
+                <!--                    <tr class="line lno--><? //= $lno ?><!--" data-lno="--><? //= $lno ?><!--">-->
+                <!--                        --><?php //foreach ($data as $cno => $col) {
+                //                            if ($cno > 0) {
+                //                                if ($cols[$cno]['view'] === true) {
+                //                                    $col = trim($col);
+                //                                    $key = 'col' . $cno; ?>
+                <!--                                    <td class="col cno--><? //= $cno ?><!--" data-cno="-->
+                <? //= $cno ?><!--">--><? //= $col ?><!--</td>-->
+                <!--                                --><?php //}
+                //                            }
+                //                        } ?>
+                <!--                    </tr>-->
+                <!--                --><?php //} ?>
+                <!--            --><?php //} ?>
+                <!--        --><?php //} ?>
+        </div>
     </div>
 
     <script id="<?= $id ?>Script">
-        function transcodeBtnsActions() {
-            var btnsActions = $.map($("#<?=$id?>BtnsActions [id]"), function (n, i) {
-                return n.id;
-            });
-            $.each(eltSelection, function (i, selection) {
-                var hidden = selection.getAttribute('data-hidden');
-            .
-                split('|');
-                var lno = selection.getAttribute('data-lno');
-                btnsActions.each(function (idx) {
-                    if (!$.inArray(idx, hidden)) {
-                        $("#" + idx)
-                            .clone()
-                            .prop('id', idx + lno)
-                            .appendTo("#" + selection.id)
-                        ;
-                    }
-                })
-            }
-        }
-
         <?php if (!empty($events)) {
             foreach (formatEvents($events, $id, $object) as $formatEvent) {
                 echo $formatEvent;
             }
         } ?>
 
+        <?php if (!empty($event)) { ?>
         $(document).ready(function (e) { <?php
-            if (!empty($event)) {
-                require_once __DIR__ . "/../../../../graphicobjecttemplating/oobjects/eventsJS.phtml";
-                setOnEvents($event, $this->objet);
-            } ?>
-
-            transcodeBtnsActions();
-        });
+            require_once __DIR__ . "/../../../../graphicobjecttemplating/oobjects/macros/eventsJS.phtml";
+            setOnEvents($event, $this->objet);
+            ?> });
+        <?php } ?>
     </script>
-</div>-
+</div>

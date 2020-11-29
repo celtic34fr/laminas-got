@@ -134,7 +134,7 @@ if ($icon) {
 
     if ($type !== ODButton::BUTTONTYPE_LINK) {
         if ($event) {
-            require_once __DIR__."/../../../../graphicobjecttemplating/oobjects/eventsHTML.phtml";
+            require_once __DIR__ . "/../../../../graphicobjecttemplating/oobjects/macros/eventsHTML.phtml";
             setEvents($event);
         }
     }
@@ -167,14 +167,14 @@ if ($icon) {
     if ($type !== 'link' && !empty($event)) { ?>
     <script>
         $(document).ready(function (e) { <?php
-            require_once __DIR__."/../../../../graphicobjecttemplating/oobjects/eventsJS.phtml";
+            require_once __DIR__ . "/../../../../graphicobjecttemplating/oobjects/macros/eventsJS.phtml";
             setOnEvents($event, $this->objet);
         ?> });
     </script>
     <?php }
 
     //    if ($infoBulle) {
-    //        include $this->asset("graphicobjecttemplating/oobjects/infoBulle.js.phtml");
+    //        include $this->asset("graphicobjecttemplating/oobjects/macros/infoBulle.js.phtml");
     //        setInfoBulle($infoBulle, $id);
     //    }
     ?>

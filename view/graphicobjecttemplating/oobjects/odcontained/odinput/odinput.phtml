@@ -50,7 +50,7 @@ foreach ($events as $evt => $event) {
      data-widthBT="<?= $widthBT ?>" <?php if ($form) { ?> data-form="<?= $form ?>" <?php } ?>
     <?php
     if ($events) {
-        include $this->asset("graphicobjecttemplating/oobjects/eventsHTML.phtml");
+        include $this->asset("graphicobjecttemplating/oobjects/macros/eventsHTML.phtml");
         setEvents($events);
     }
     ?>
@@ -153,17 +153,17 @@ foreach ($events as $evt => $event) {
             if (!empty($mask)) {?> $("#<?= $id ?> input").mask("<?= $mask ?>"); <?php }
 
             if ($autoFocus) {
-                require_once __DIR__."/../../../../graphicobjecttemplating/oobjects/autoFocus.phtml";
+                require_once __DIR__."/../../../../graphicobjecttemplating/oobjects/macros/autoFocus.phtml";
                 setAutoFocus($this->objet['id']);
             }
 
             if (!empty($this->objet['event'])) {
-                require_once __DIR__."/../../../../graphicobjecttemplating/oobjects/eventsJS.phtml";
+                require_once __DIR__ . "/../../../../graphicobjecttemplating/oobjects/macros/eventsJS.phtml";
                 setOnEvents($this->objet['event'], $this->objet);
             }
 
             //    if ($infoBulle) {
-            //        include $this->asset("graphicobjecttemplating/oobjects/infoBulle.js.phtml");
+            //        include $this->asset("graphicobjecttemplating/oobjects/macros/infoBulle.js.phtml");
             //        setInfoBulle($infoBulle, $id);
             //    }
             ?>

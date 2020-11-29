@@ -31,7 +31,7 @@ $objClasses = 'gotObject hidden ' . $id . ' ' . $classes;
     <?php if (!empty($form)) { ?> data-form="<?= $form ?>" <?php } ?>
     <?php if ($state == false) { ?>  disabled <?php } ?> <?php if (!empty($event)) { ?> checkboxCback <?php } ?>
     <?php if ($event) {
-        require_once __DIR__ . "/../../../../graphicobjecttemplating/oobjects/eventsHTML.phtml";
+        require_once __DIR__ . "/../../../../graphicobjecttemplating/oobjects/macros/eventsHTML.phtml";
         setEvents($event);
     } ?>
 >
@@ -147,7 +147,7 @@ $objClasses = 'gotObject hidden ' . $id . ' ' . $classes;
         });
 
         <?php if (!empty($this->objet['event'])) {
-            require_once __DIR__ . "/../../../../graphicobjecttemplating/oobjects/eventsJS.phtml";
+            require_once __DIR__ . "/../../../../graphicobjecttemplating/oobjects/macros/eventsJS.phtml";
             setOnEvents($this->objet['event'], $this->objet);
         }?>
     </script>

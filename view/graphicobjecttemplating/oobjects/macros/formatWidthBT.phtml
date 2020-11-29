@@ -1,8 +1,10 @@
 <?php
 
-function formatWidthBT($val) {
+function formatWidthBT($val)
+{
+    $rslt_val = [];
+
     if (!empty($val)) {
-        $classes = "";
         $lxs = $lsm = $lmd = $llg = 0;
         $ixs = $ism = $imd = $ilg = 0;
 
@@ -56,16 +58,29 @@ function formatWidthBT($val) {
                 break;
         }
 
-        if ($llg > 0) $classes .= 'col-lg-'.$llg.' ';
-        if ($lmd > 0) $classes .= 'col-md-'.$llg.' ';
-        if ($lsm > 0) $classes .= 'col-sm-'.$llg.' ';
-        if ($lxs > 0) $classes .= 'col-xs-'.$llg.' ';
+        if ($llg > 0) $rslt_val['llg'] = $llg;
+        if ($lmd > 0) $rslt_val['lmd'] = $lmd;
+        if ($lsm > 0) $rslt_val['lsm'] = $lsm;
+        if ($lxs > 0) $rslt_val['lxs'] = $lxs;
 
-        if ($ilg > 0) $classes .= 'offset-lg-'.$ilg.' ';
-        if ($imd > 0) $classes .= 'offset-md-'.$imd.' ';
-        if ($ism > 0) $classes .= 'offset-sm-'.$ism.' ';
-        if ($ixs > 0) $classes .= 'offset-xs-'.$ixs.' ';
-
-        return $classes;
+        if ($ilg > 0) $rslt_val['ilg'] = $ilg;
+        if ($imd > 0) $rslt_val['imd'] = $imd;
+        if ($ism > 0) $rslt_val['ism'] = $ism;
+        if ($ixs > 0) $rslt_val['ixs'] = $ixs;
     }
+
+    return $rslt_val;
+}
+
+function formatWidthBTstr($val)
+{
+    $colsWidthBT = formatWidthBT($val);
+    $chaine = "";
+
+    if (array_key_exists('llg', $colsWidthBT)) $chaine .= 'col-lg-' . $colsWidthBT['llg'] . ' ';
+    if (array_key_exists('lmd', $colsWidthBT)) $chaine .= 'col-md-' . $colsWidthBT['llg'] . ' ';
+    if (array_key_exists('lsm', $colsWidthBT)) $chaine .= 'col-sm-' . $colsWidthBT['llg'] . ' ';
+    if (array_key_exists('lxs', $colsWidthBT)) $chaine .= 'col-xs-' . $colsWidthBT['llg'] . ' ';
+
+    return $chaine;
 }
