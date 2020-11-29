@@ -29,7 +29,7 @@ if (empty($colsWidth) && empty($colsWidthBT)) {
 
 $objClasses = 'gotObject hidden ' . $id . " " . $classes;
 
-require_once __DIR__ . "/../../../../graphicobjecttemplating/oobjects/formatWidthBT.phtml";
+require_once __DIR__ . "/../../../../graphicobjecttemplating/oobjects/macros/formatWidthBT.phtml";
 
 function formatEvents(array $evtsTabs, string $id, string $object)
 {
@@ -93,23 +93,6 @@ function formatStyles(array $stylesTab, string $id)
         }?>
     </style>
 
-    <!--    <div id="--><? //= $id ?><!--" class="-->
-    <? //= $objClasses ?><!-- ln0 cn0" data-lno="0" data-cno="0" data-display="--><? //= $display ?><!--">-->
-    <!--        <div class="thead">-->
-    <!--            <div class="d-flex">-->
-    <!--                <div class="col-sm-3">3 columns wide header</div>-->
-    <!--                <div class="col-sm-5">5 columns wide header</div>-->
-    <!--                <div class="col-sm-4">4 columns wide header</div>-->
-    <!--            </div>-->
-    <!--        </div>-->
-    <!--        <div class="tbody">-->
-    <!--            <div class="d-flex">-->
-    <!--                <div class="--><? //= formatWidthBTstr(3) ?><!--">3 columns wide content</div>-->
-    <!--                <div class="col-sm-5">5 columns wide content</div>-->
-    <!--                <div class="col-sm-4">4 columns wide content</div>-->
-    <!--            </div>-->
-    <!--        </div>-->
-    <!--    </div>-->
     <div id="<?= $id ?>_table" class="<?= $objClasses ?> lno0 cno0 table" data-lno="0" data-cno="0"
          data-display="<?= $display ?>" data-widthbt="<?= $widthBT ?>">
         <div class="<?= $id ?>Head thead">
@@ -137,30 +120,29 @@ function formatStyles(array $stylesTab, string $id)
         </div>
         <div class="<?= $id ?>TBody tbody">
             <div class="line row nodata <?php if (count($datas) > 0) { ?>hide<?php } ?>">
-                <div style="text-align: center" class="<?=formatWidthBTstr(12)?> td">
+                <div style="text-align: center" class="<?= formatWidthBTstr(12) ?> td">
                     <span>No data to show</span>
                 </div>
             </div>
-                <!--        --><?php //if (count($datas) > 0) {
-                //            foreach ($datas as $lno => $data) {
-                //                if ($datas['view'] === true) {
-                //                    $key = 'line' . $lno;
-                //                    $data0 = $data[0]; ?>
-                <!--                    <tr class="line lno--><? //= $lno ?><!--" data-lno="--><? //= $lno ?><!--">-->
-                <!--                        --><?php //foreach ($data as $cno => $col) {
-                //                            if ($cno > 0) {
-                //                                if ($cols[$cno]['view'] === true) {
-                //                                    $col = trim($col);
-                //                                    $key = 'col' . $cno; ?>
-                <!--                                    <td class="col cno--><? //= $cno ?><!--" data-cno="-->
-                <? //= $cno ?><!--">--><? //= $col ?><!--</td>-->
-                <!--                                --><?php //}
-                //                            }
-                //                        } ?>
-                <!--                    </tr>-->
-                <!--                --><?php //} ?>
-                <!--            --><?php //} ?>
-                <!--        --><?php //} ?>
+            <?php if (count($datas) > 0) {
+                foreach ($datas as $lno => $data) {
+                    if ($datas['view'] === true) {
+                        $key = 'line' . $lno;
+                        $data0 = $data[0]; ?>
+                        <div class="tr line lno<?= $lno ?>" data-lno="<?= $lno ?>">
+                            <?php foreach ($data as $cno => $col) {
+                                if ($cno > 0) {
+                                    if ($cols[$cno]['view'] === true) {
+                                        $col = trim($col);
+                                        $key = 'col' . $cno; ?>
+                                        <div class="td col cno<?= $cno ?>" data-cno="<?= $cno ?>"><?= $col ?></div>
+                                    <?php }
+                                }
+                            } ?>
+                        </div>
+                    <?php } ?>
+                <?php } ?>
+            <?php } ?>
         </div>
     </div>
 
