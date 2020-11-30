@@ -1,0 +1,77 @@
+<?php
+
+$events = $this->objet['events'];
+$id = $this->objet['id'];
+$classes = $this->objet['classes'];
+$object = $this->objet['object'];
+$display = $this->objet['display'];
+$widthBT = $this->objet['widthBT'];
+$form = $this->objet['form'];
+$event = $this->objet['event'];
+$label = $this->objet['label'];
+$labelClass = $this->objet['labelClass'];
+$labelWidthBT = $this->objet['labelWidthBT'];
+$selectClass = $this->objet['selectClass'];
+$selectWidthBT = $this->objet['selectWidthBT'];
+$format = $this->objet['format'];
+$multiple = $this->objet['multiple'];
+$state = $this->objet['state'];
+$placeholder = $this->objet['placeholder'];
+$options = $this->objet['options'];
+
+$evtChange = "";
+foreach ($events as $evt => $event) {
+    switch ($evt) {
+        case 'change':
+            $evtChange = "selectChg";
+    }
+}
+$objClasses = "gotObject hidden " . $id . " " . $classes . " " . $evtChange;
+?>
+
+<div id="<?= $id ?>" data-objet="<?= $object ?>" data-display="<?= $display ?>" class="<?= $objClasses ?>"
+     data-widthbt="<?= $widthBT ?>" <?php if (strlen($form) > 0) { ?> data-form="<?= $form ?>" <?php } ?>
+    <?php
+    if ($event) {
+        require_once __DIR__ . "/../../../../graphicobjecttemplating/oobjects/macros/eventsHTML.phtml";
+        setEvents($event);
+    }
+    ?>
+>
+    <label for="<?= $id ?>Select" class="<?= $labelClass ?>"
+        <?php if (!empty($labelWidthBT)) { ?> data-widthbt="<?= $labelWidthBT ?>" <?php } ?>
+    ><?= $label ?></label>
+    <span class="<?= $format ?>>">
+        <select id="<?= $id ?>Select" class="<?= $selectClass ?>"
+                <?php if (!empty($selectWidthBT)) { ?> data-widthbt="<?= $selectWidthBT ?>" <?php } ?>
+            <?php if ($multiple) { ?> multiple <?php }
+            if ($state === false) { ?> disabled <?php } ?>
+        >
+            <?php if (!empty($placeholder)) { ?>
+                <option value="" disabled selected><?= $placeholder ?></option>
+            <?php }
+            foreach ($options as $value => $item) { ?>
+                <option value="<?= $value ?>"
+                    <?php if ($item['selected']) { ?> selected <?php }
+                    if (!$item['enable']) { ?> disabled <?php } ?> >
+                <?= $item['libel'] ?>
+            </option>
+            <?php } ?>
+        </select>
+    </span>
+
+    <script>
+        $(document).ready(function (e) {
+            setBtClasses("#<?=$id?> label", $("#<?=$id?> label").data("widthbt"));
+            setBtClasses("#<?=$id?> select", $("#<?=$id?> select").data("widthbt"));
+
+            <?php if (!empty($event)) {
+            require_once
+                __DIR__ .
+                "/../../../../graphicobjecttemplating/oobjects/macros/eventsJS.phtml";
+            setOnEvents($event, $this->objet);
+            } ?>
+        })
+    </script>
+    <
+    /div>
