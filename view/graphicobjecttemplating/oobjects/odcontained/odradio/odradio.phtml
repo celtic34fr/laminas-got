@@ -1,0 +1,82 @@
+<?php
+
+$id = $this->objet['id'];
+$classes = $this->objet['classes'];
+$object = $this->objet['object'];
+$state = $this->objet['state'];
+$display = $this->objet['display'];
+$widthBT = $this->objet['widthBT'];
+$form = (array_key_exists('form', $this->objet)) ? $this->objet['form'] : null;
+$event = $this->objet['event'];
+$forme = $this->objet['forme'];
+$labelWidthBT = $this->objet['labelWidthBT'];
+$label = $this->objet['label'];
+$inputWidthBT = $this->objet['inputWidthBT'];
+$options = $this->objet['options'];
+
+$objClasses = 'gotObject hidden ' . $id . ' ' . $classes;
+
+$data = '';
+if ($state === false) {
+    $data .= 'disabled ';
+}
+if (!empty($display)) {
+    $data .= 'data-display="' . $display . '" ';
+}
+if (!empty($widthBT)) {
+    $data .= 'data-widthbt="' . $widthBT . '" ';
+}
+if (!empty($form)) {
+    $data .= 'data-form="' . $form . '" ';
+}
+if ($event) {
+    require_once __DIR__ . "/../../../../graphicobjecttemplating/oobjects/macros/eventsHTML.phtml";
+    $data .= setEvents($event);
+}
+?>
+<div id="<?= $id ?>>" data-objet="<?= $object ?>" class="radio <?= $objClasses ?>" <?= $data ?> >
+    <?php if (!empty($labelWidthBT)) {
+        $data = 'data-widthbt="' . $labelWidthBT . '"';
+    } else {
+        $data = '';
+    } ?>
+    <div class="radioLabel <?= $forme ?>" <?= $data ?> >
+        <?= $label ?>
+    </div>
+    <?php if (!empty($inputWidthBT)) {
+        $data = 'data-widthbt="' . $inputWidthBT . '"';
+    } else {
+        $data = '';
+    } ?>
+    <div id="<?= $id ?>radioBtns" class="radionBtns <?= $forme ?>" <?= $data ?>>
+        <?php foreach ($options as $radio) { ?>
+        <div class="<?= $radio['type'] ?><?= $forme ?>">
+            <?php
+            $data = '';
+            if ($state === false or $radio['state'] === false) {
+                $data .= 'disabled ';
+            }
+            if ($radio['check'] === 'check') {
+                $data .= 'checked="checked" ';
+            }
+            ?>
+            <input type="radio" id="<?= $id ?><?= $radio['value'] ?>" name="<?= $id ?>Radio" class="radioBtn"
+                   value="<?= $radio['value'] ?>" <?= $data ?>
+            />
+            <label for="<?= $id ?><?= $radio['value'] ?>"><?= $radio['libel'] ?></label>
+        </div>
+        <?php } ?>
+    </div>
+
+    <script id="{{ objet.id }}Scripts">
+        $(document).ready(function (e) {
+            setBtClasses("#<?=$id?> .radioLabel", $("#<?=$id?> .radioLabel").data("widthbt"));
+            setBtClasses("#<?=$id?> .radionBtns", $("#<?=$id?> .radionBtns").data("widthbt"));
+
+            <?php if (!empty($event)) {
+                require_once __DIR__."/../../../../graphicobjecttemplating/oobjects/macros/eventsJS.phtml";
+                echo setOnEvents($event, $this->objet);
+            } ?>
+        });
+    </script>
+</div>

@@ -4,33 +4,35 @@
  **/
 function setOnEvents($events, $objet, $tag = null)
 {
+    $str = '';
     foreach ($events as $evt => $event) {
         if (!empty($event)) {
             if ($event['class'] !== 'dummy') {
-                echo '$(".' . $objet['id'] . '").on("' . $evt . '", ';
-                if ($tag) { echo '"' . $tag . '",'; }
-                echo " function (e) {";
+                $str .= '$(".' . $objet['id'] . '").on("' . $evt . '", ';
+                if ($tag) { $str .= '"' . $tag . '",'; }
+                $str .= " function (e) {";
                 if ($event['class'] === "javascript:") {
-                    echo $event['method'];
+                    $str .= $event['method'];
                 } else {
-                    echo 'let objetDOM = $(this);';
-                    echo 'let objet = new ' . $objet['object'] . '(objetDOM);';
-                    echo 'var invalid = "";';
-                    echo 'if (typeof objet.invalidate === "function") {';
-                    echo 'invalid = objet.invalidate();';
-                    echo '}';
-                    echo 'if (invalid.length == 0) {';
-                    echo '    $(this).remove("has-error");';
-                    echo '    $(this).find("span.error").removeClass("hidden").addClass("hidden");';
-                    echo '    invokeAjax(objet.getData("' . $evt . '"), "' . $objet['id'] . '", "' . $evt . '", e);';
-                    echo '} else {';
-                    echo '    $(this).remove("has-error").addClass("has-error");';
-                    echo '    $(this).find("span.error").removeClass("hidden");';
-                    echo '    $(this).find("span.error").html(invalid);';
-                    echo '}';
+                    $str .= 'let objetDOM = $(this);';
+                    $str .= 'let objet = new ' . $objet['object'] . '(objetDOM);';
+                    $str .= 'var invalid = "";';
+                    $str .= 'if (typeof objet.invalidate === "function") {';
+                    $str .= 'invalid = objet.invalidate();';
+                    $str .= '}';
+                    $str .= 'if (invalid.length == 0) {';
+                    $str .= '    $(this).remove("has-error");';
+                    $str .= '    $(this).find("span.error").removeClass("hidden").addClass("hidden");';
+                    $str .= '    invokeAjax(objet.getData("' . $evt . '"), "' . $objet['id'] . '", "' . $evt . '", e);';
+                    $str .= '} else {';
+                    $str .= '    $(this).remove("has-error").addClass("has-error");';
+                    $str .= '    $(this).find("span.error").removeClass("hidden");';
+                    $str .= '    $(this).find("span.error").html(invalid);';
+                    $str .= '}';
                 }
-                echo "});";
+                $str .= "});";
             }
         }
     }
+    return $str;
 }
