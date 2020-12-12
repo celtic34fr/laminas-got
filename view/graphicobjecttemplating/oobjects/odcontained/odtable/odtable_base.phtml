@@ -19,7 +19,7 @@ if (empty($colsWidth) && empty($colsWidthBT)) {
     $width = 12 / count($cols);
     $sum_width = 0;
     for ($ind = 1, $indMax = count($cols); $ind <= $indMax; $ind++) {
-        if ($ind ==$indMax and is_float($ind)) {
+        if ($ind ==$indMax && is_float($ind)) {
             $width = 12 - $sum_width;
         }
         $colsWidthBT[$ind] = (int) $width;
@@ -152,24 +152,22 @@ function formatStyles(array $stylesTab, string $id) {
         </tr>
         </thead>
         <tbody class="<?= $id ?>">
-        <tr class="line nodata <?php if (count($datas) > 0) { ?>hide<?php } ?>">
+        <tr class="line nodata <?php if (!empty($datas)) { ?>hide<?php } ?>">
             <?php $colspan = count($cols); ?>
             <td colspan="<?= $colspan ?>" style="text-align: center">No data to show</td>
         </tr>
-        <?php if (count($datas) > 0) {
+        <?php if (!empty($datas)) {
             foreach ($datas as $lno => $data) {
                 if ($datas['view'] === true) {
                     $key = 'line' . $lno;
                     $data0 = $data[0]; ?>
                     <tr class="line lno<?= $lno ?>" data-lno="<?= $lno ?>">
                         <?php foreach ($data as $cno => $col) {
-                            if ($cno > 0) {
-                                if ($cols[$cno]['view'] === true) {
-                                    $col = trim($col);
-                                    $key = 'col' . $cno; ?>
-                                    <td class="col cno<?= $cno ?>" data-cno="<?= $cno ?>"><?= $col ?></td>
-                                <?php }
-                            }
+                            if ($cno > 0 && $cols[$cno]['view'] === true) {
+                                $col = trim($col);
+                                $key = 'col' . $cno; ?>
+                                <td class="col cno<?= $cno ?>" data-cno="<?= $cno ?>"><?= $col ?></td>
+                            <?php }
                         } ?>
                     </tr>
                 <?php } ?>

@@ -42,6 +42,8 @@ foreach ($events as $evt => $event) {
         case ODInput::EVENT_KEYUP:
             $objClasses .= " inputKup ";
             break;
+        default:
+            throw new \Exception('Unexpected value');
     }
 }
 ?>

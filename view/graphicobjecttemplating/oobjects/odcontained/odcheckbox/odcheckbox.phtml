@@ -25,11 +25,11 @@ $objClasses = 'gotObject hidden ' . $id . ' ' . $classes;
 
 ?>
 <div id="<?=$id?>" data-objet="<?=$object?>" class="<?=$objClasses?>"
-    <?php if ($state == false) { ?> checkbox disabled <?php } ?>
+    <?php if (false === $state) { ?> checkbox disabled <?php } ?>
     <?php if (!empty($display)) { ?> data-display="<?= $display ?>" <?php } ?>
     <?php if (!empty($widthBT)) { ?> data-widthbt="<?= $widthBT ?>" <?php } ?>
     <?php if (!empty($form)) { ?> data-form="<?= $form ?>" <?php } ?>
-    <?php if ($state == false) { ?>  disabled <?php } ?> <?php if (!empty($event)) { ?> checkboxCback <?php } ?>
+    <?php if ($state === false) { ?>  disabled <?php } ?> <?php if (!empty($event)) { ?> checkboxCback <?php } ?>
     <?php if ($event) {
         require_once __DIR__ . "/../../../../graphicobjecttemplating/oobjects/macros/eventsHTML.phtml";
         setEvents($event);
@@ -75,10 +75,10 @@ $objClasses = 'gotObject hidden ' . $id . ' ' . $classes;
                 <?php if (count($options) === 1) { ?>col-lg-12 col-md-12 col-sm-12 col-xs-12<?php } ?>">
                 <?php if ($placement !== "right") { ?>
                     <label for="<?=$id?><?=$loop?>"
-                        <?php if (count($options) == 1 and !empty($labelWidthBT)) { ?>
+                        <?php if (count($options) == 1 && !empty($labelWidthBT)) { ?>
                             data-widthbt="<?=$labelWidthBT?>"
                         <?php } ?>
-                        <?php if (count($options) > 1 and !empty($checkLabelWidthBT)) { ?>
+                        <?php if (count($options) > 1 && !empty($checkLabelWidthBT)) { ?>
                             data-widthbt="<?=$checkLabelWidthBT?>"
                         <?php } ?>
                         style="text-align: center">
@@ -86,21 +86,21 @@ $objClasses = 'gotObject hidden ' . $id . ' ' . $classes;
                     </label>
                 <?php } ?>
                 <input id="<?=$id?><?=$loop?>" type="checkbox" value="<?=$value?>"
-                    <?php if ($option['state'] === false or $state === false) { ?> disabled <?php } ?>
+                    <?php if ($option['state'] === false || $state === false) { ?> disabled <?php } ?>
                     <?php if ($options['check'] === 'check') { ?>checked <?php } ?>
-                    <?php if (count($options) === 1 and !empty($inputWidthBT)) { ?>
+                    <?php if (count($options) === 1 && !empty($inputWidthBT)) { ?>
                         data-widthbt="<?=$inputWidthBT?>"
                     <?php } ?>
-                    <?php if (count($options) > 1 and !empty($checkInputWidthBT)) { ?>
+                    <?php if (count($options) > 1 && !empty($checkInputWidthBT)) { ?>
                         data-widthbt="<?=$checkInputWidthBT?>"
                        <?php } ?>
                 >
                 <?php if ($placement === "right") { ?>
                     <label for="<?= $id ?><?= $loop ?>"
-                        <?php if (count($options) === 1 and !empty($labelWidthBT)) { ?>
+                        <?php if (count($options) === 1 && !empty($labelWidthBT)) { ?>
                             data-widthbt="<?= $labelWidthBT ?>"
                         <?php } ?>
-                        <?php if (count($options) > 1 and !empty($checkLabelWidthBT)) { ?>
+                        <?php if (count($options) > 1 && !empty($checkLabelWidthBT)) { ?>
                             data-widthbt="<?= $checkLabelWidthBT ?>"
                         <?php } ?>
                         style="text-align: center">

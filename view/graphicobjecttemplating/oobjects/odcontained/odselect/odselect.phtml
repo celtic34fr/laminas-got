@@ -21,9 +21,8 @@ $options = $this->objet['options'];
 
 $evtChange = "";
 foreach ($events as $evt => $event) {
-    switch ($evt) {
-        case 'change':
-            $evtChange = "selectChg";
+    if ($evt == 'change') {
+        $evtChange = "selectChg";
     }
 }
 $objClasses = "gotObject hidden " . $id . " " . $classes . " " . $evtChange;

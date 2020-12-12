@@ -85,6 +85,8 @@ class LF3GotServices
                     case 'OX' :
                         $classesObj .= ' col-xs-offset-' . substr($item, 2);
                         break;
+                    default:
+                        throw new \Exception('Unexpected value');
                 }
             }
         }
@@ -110,13 +112,13 @@ class LF3GotServices
         switch ($properties['typeObj']) {
             case 'odcontained' :
             case 'oedcontained':
-                switch (true) { // tratitement spécificités objets ODContained
-                    case ($object instanceof ODTable):
-                        /** traitement des boutons en de formulaire */
-                        if ($properties['btnsActions']->haschild()) {
-                            $properties['btnsActions'] = $this->render_html($properties['btnsActions']);
-                        }
-                        break;
+                if ($object instanceof ODTable) {
+                    /** traitement des boutons en de formulaire */
+                    if ($properties['btnsActions']->haschild()) {
+                        $properties['btnsActions'] = $this->render_html($properties['btnsActions']);
+                    }
+                } else {
+                    throw new \Exception('Unexpected value');
                 }
                 $html->setTemplate($template);
                 $html->setVariable('objet', $properties);
@@ -134,19 +136,21 @@ class LF3GotServices
                         $content .= $rendu;
                     }
                 }
-                switch (true) {// tratitement spécificités objets OSContainer
-                    case ($object instanceof OSForm):
-                        /** traitement des boutons en de formulaire */
-                        if ($properties['btnsControls']->haschild()) {
-                            $properties['btnsControls'] = $this->render_html($properties['btnsControls']);
-                        }
-                        break;
+            if ($object instanceof OSForm) {
+                /** traitement des boutons en de formulaire */
+                if ($properties['btnsControls']->haschild()) {
+                    $properties['btnsControls'] = $this->render_html($properties['btnsControls']);
                 }
+            } else {
+                throw new \Exception('Unexpected value');
+            }
                 $html->setTemplate($template);
                 $html->setVariable('objet', $properties);
                 $html->setVariable('content', $content);
                 $html->setVariable('id', $properties['id']);
                 break;
+            default:
+                throw new \Exception('Unexpected value');
         }
         $renduHtml .= $this->_render->render($html);
         $renduHtml = preg_replace('/(\s)\s+/', '$1', $renduHtml);
@@ -294,8 +298,8 @@ class LF3GotServices
                 switch (true) {
                     case (str_starts_with($link, 'graphicobjecttemplating')):
                         break;
-                    case (str_contains($link, 'odcontained') and str_starts_with($link, 'odcontained')):
-                    case (str_contains($link, 'oscontainer') and str_starts_with($link, 'oscontainer')):
+                    case (str_contains($link, 'odcontained') && str_starts_with($link, 'odcontained')):
+                    case (str_contains($link, 'oscontainer') && str_starts_with($link, 'oscontainer')):
                         $rscs[$type][$key] = "graphicobjecttemplating/oobjects/{$link}";
                         break;
                     default:
@@ -316,7 +320,7 @@ class LF3GotServices
      */
     public function formatRetour($idSource, $idCible, $mode, $code = null): array
     {
-        if (empty($idCible)) $idCible = $idSource;
+        if (empty($idCible)) { $idCible = $idSource; }
         $occurence = ['idSource' => $idSource, 'idCible' => $idCible, 'mode' => $mode, 'code' => $code];
         return [$occurence];
     }

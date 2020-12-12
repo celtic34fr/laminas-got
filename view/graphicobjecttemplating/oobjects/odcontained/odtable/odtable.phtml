@@ -19,7 +19,7 @@ if (empty($colsWidth) && empty($colsWidthBT)) {
     $width = 12 / count($cols);
     $sum_width = 0;
     for ($ind = 0, $indMax = count($cols); $ind < $indMax; $ind++) {
-        if ($ind == ($indMax - 1) and is_float($width)) {
+        if ($ind == ($indMax - 1) && is_float($width)) {
             $width = 12 - $sum_width;
         }
         $colsWidthBT[$ind] = (int)$width;
@@ -119,25 +119,23 @@ function formatStyles(array $stylesTab, string $id)
             </div>
         </div>
         <div class="<?= $id ?>TBody tbody">
-            <div class="line row nodata <?php if (count($datas) > 0) { ?>hide<?php } ?>">
+            <div class="line row nodata <?php if (!empty($datas)) { ?>hide<?php } ?>">
                 <div style="text-align: center" class="<?= formatWidthBTstr(12) ?> td">
                     <span>No data to show</span>
                 </div>
             </div>
-            <?php if (count($datas) > 0) {
+            <?php if (!empty($datas)) {
                 foreach ($datas as $lno => $data) {
                     if ($datas['view'] === true) {
                         $key = 'line' . $lno;
                         $data0 = $data[0]; ?>
                         <div class="tr line lno<?= $lno ?>" data-lno="<?= $lno ?>">
                             <?php foreach ($data as $cno => $col) {
-                                if ($cno > 0) {
-                                    if ($cols[$cno]['view'] === true) {
-                                        $col = trim($col);
-                                        $key = 'col' . $cno; ?>
-                                        <div class="td col cno<?= $cno ?>" data-cno="<?= $cno ?>"><?= $col ?></div>
-                                    <?php }
-                                }
+                                if ($cno > 0 && $cols[$cno]['view'] === true) {
+                                    $col = trim($col);
+                                    $key = 'col' . $cno; ?>
+                                    <div class="td col cno<?= $cno ?>" data-cno="<?= $cno ?>"><?= $col ?></div>
+                                <?php }
                             } ?>
                         </div>
                     <?php } ?>

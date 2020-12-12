@@ -88,19 +88,17 @@ if (!empty($event) && $type !== ODButton::BUTTONTYPE_LINK) {
 $routeURL = '';
 $codeJs = '';
 /** bouton lien sur route Laminas */
-if ($type === ODButton::BUTTONTYPE_LINK) {
-    if (array_key_exists('click', $event)) {
-        $route = $event['click']['class'];
-        $params = $event['click']['method'];
-        if ($route && $route !== 'javascript:') {
-            if (!$params) {
-                $routeURL = $this->url(strtolower($route));
-            } else {
-                $routeURL = $this->url(strtolower($route), $params);
-            }
+if ($type === ODButton::BUTTONTYPE_LINK && array_key_exists('click', $event)) {
+    $route = $event['click']['class'];
+    $params = $event['click']['method'];
+    if ($route && $route !== 'javascript:') {
+        if (!$params) {
+            $routeURL = $this->url(strtolower($route));
         } else {
-            $codeJs = $params;
+            $routeURL = $this->url(strtolower($route), $params);
         }
+    } else {
+        $codeJs = $params;
     }
 }
 
@@ -132,11 +130,9 @@ if ($icon) {
         echo 'data-form="' . $form . '" ';
     }
 
-    if ($type !== ODButton::BUTTONTYPE_LINK) {
-        if ($event) {
-            require_once __DIR__ . "/../../../../graphicobjecttemplating/oobjects/macros/eventsHTML.phtml";
-            setEvents($event);
-        }
+    if ($type !== ODButton::BUTTONTYPE_LINK && $event) {
+        require_once __DIR__ . "/../../../../graphicobjecttemplating/oobjects/macros/eventsHTML.phtml";
+        setEvents($event);
     }
     ?>
 >

@@ -8,65 +8,80 @@ function formatWidthBT($val)
         $lxs = $lsm = $lmd = $llg = 0;
         $ixs = $ism = $imd = $ilg = 0;
 
-        switch (true) {
-            case (is_numeric($val) and (int)$val <= 12):
-                $lxs = $lsm = $lmd = $llg = (int)$val;
+        if (is_numeric($val) && (int)$val <= 12) {
+            $lxs = $lsm = $lmd = $llg = (int)$val;
 //                $ixs = $ism = $imd = $ilg = 12 - (int)$val;
-                break;
-            default:
-                foreach (explode(':', $val) as $item) {
-                    $key = strtoupper($item);
-                    switch (substr($key, 0, 2)) {
-                        case 'WL':
-                            $llg = (int)substr($key, 2);
-                            break;
-                        case 'WM':
-                            $lmd = (int)substr($key, 2);
-                            break;
-                        case 'WS':
-                            $lsm = (int)substr($key, 2);
-                            break;
-                        case 'WX':
-                            $lxs = (int)substr($key, 2);
-                            break;
-                        case 'OL':
-                            $ilg = (int)substr($key, 2);
-                            break;
-                        case 'OM':
-                            $imd = (int)substr($key, 2);
-                            break;
-                        case 'OS':
-                            $ism = (int)substr($key, 2);
-                            break;
-                        case 'OX':
-                            $ixs = (int)substr($key, 2);
-                            break;
-                        default:
-                            switch ($key[0]) {
-                                case 'W':
-                                    $llg = (int)substr($key, 1);
-                                    $lmd = $lsm = $lxs = $llg;
-                                    break;
-                                case 'O':
-                                    $ilg = (int)substr($key, 1);
-                                    $imd = $ism = $ixs = $ilg;
-                                    break;
-                            }
-                            break;
-                    }
+        } else {
+            foreach (explode(':', $val) as $item) {
+                $key = strtoupper($item);
+                switch (substr($key, 0, 2)) {
+                    case 'WL':
+                        $llg = (int)substr($key, 2);
+                        break;
+                    case 'WM':
+                        $lmd = (int)substr($key, 2);
+                        break;
+                    case 'WS':
+                        $lsm = (int)substr($key, 2);
+                        break;
+                    case 'WX':
+                        $lxs = (int)substr($key, 2);
+                        break;
+                    case 'OL':
+                        $ilg = (int)substr($key, 2);
+                        break;
+                    case 'OM':
+                        $imd = (int)substr($key, 2);
+                        break;
+                    case 'OS':
+                        $ism = (int)substr($key, 2);
+                        break;
+                    case 'OX':
+                        $ixs = (int)substr($key, 2);
+                        break;
+                    default:
+                        switch ($key[0]) {
+                            case 'W':
+                                $llg = (int)substr($key, 1);
+                                $lmd = $lsm = $lxs = $llg;
+                                break;
+                            case 'O':
+                                $ilg = (int)substr($key, 1);
+                                $imd = $ism = $ixs = $ilg;
+                                break;
+                            default:
+                                throw new \Exception('Unexpected value');
+                        }
+                        break;
                 }
-                break;
+            }
         }
 
-        if ($llg > 0) $rslt_val['llg'] = $llg;
-        if ($lmd > 0) $rslt_val['lmd'] = $lmd;
-        if ($lsm > 0) $rslt_val['lsm'] = $lsm;
-        if ($lxs > 0) $rslt_val['lxs'] = $lxs;
+        if ($llg > 0) {
+            $rslt_val['llg'] = $llg;
+        }
+        if ($lmd > 0) {
+            $rslt_val['lmd'] = $lmd;
+        }
+        if ($lsm > 0) {
+            $rslt_val['lsm'] = $lsm;
+        }
+        if ($lxs > 0) {
+            $rslt_val['lxs'] = $lxs;
+        }
 
-        if ($ilg > 0) $rslt_val['ilg'] = $ilg;
-        if ($imd > 0) $rslt_val['imd'] = $imd;
-        if ($ism > 0) $rslt_val['ism'] = $ism;
-        if ($ixs > 0) $rslt_val['ixs'] = $ixs;
+        if ($ilg > 0) {
+            $rslt_val['ilg'] = $ilg;
+        }
+        if ($imd > 0) {
+            $rslt_val['imd'] = $imd;
+        }
+        if ($ism > 0) {
+            $rslt_val['ism'] = $ism;
+        }
+        if ($ixs > 0) {
+            $rslt_val['ixs'] = $ixs;
+        }
     }
 
     return $rslt_val;
@@ -77,10 +92,18 @@ function formatWidthBTstr($val)
     $colsWidthBT = formatWidthBT($val);
     $chaine = "";
 
-    if (array_key_exists('llg', $colsWidthBT)) $chaine .= 'col-lg-' . $colsWidthBT['llg'] . ' ';
-    if (array_key_exists('lmd', $colsWidthBT)) $chaine .= 'col-md-' . $colsWidthBT['llg'] . ' ';
-    if (array_key_exists('lsm', $colsWidthBT)) $chaine .= 'col-sm-' . $colsWidthBT['llg'] . ' ';
-    if (array_key_exists('lxs', $colsWidthBT)) $chaine .= 'col-xs-' . $colsWidthBT['llg'] . ' ';
+    if (array_key_exists('llg', $colsWidthBT)) {
+        $chaine .= 'col-lg-' . $colsWidthBT['llg'] . ' ';
+    }
+    if (array_key_exists('lmd', $colsWidthBT)) {
+        $chaine .= 'col-md-' . $colsWidthBT['llg'] . ' ';
+    }
+    if (array_key_exists('lsm', $colsWidthBT)) {
+        $chaine .= 'col-sm-' . $colsWidthBT['llg'] . ' ';
+    }
+    if (array_key_exists('lxs', $colsWidthBT)) {
+        $chaine .= 'col-xs-' . $colsWidthBT['llg'] . ' ';
+    }
 
     return $chaine;
 }

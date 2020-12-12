@@ -70,14 +70,14 @@ odcheckbox.prototype = {
 
 jQuery(document).ready(function (evt) {
 
-    $(document).on("change", ".gotObject.checkboxCback[data-objet='odcheckbox']", function (evt) {
+    $(document).on("change", ".gotObject.checkboxCback[data-objet='odcheckbox']", function (event) {
         let objet = new odcheckbox($(this));
         let invalid = "";
         if (typeof objet.invalidate === "function") { invalid = objet.invalidate(); }
         if (invalid.length === 0) {
             $(this).remove("has-error");
             $(this).find("span").removeClass("hidden").addClass("hidden");
-            invokeAjax(objet.getData("click"), $(this).attr("id"), "click", evt);
+            invokeAjax(objet.getData("click"), $(this).attr("id"), "click", event);
         } else {
             $(this).remove("has-error").addClass("has-error");
             $(this).find("span").removeClass("hidden").html(invalid);

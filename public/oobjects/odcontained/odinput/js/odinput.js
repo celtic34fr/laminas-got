@@ -42,9 +42,9 @@ class odinput {
                 break;
             case 'text':
                 let mask = this.data['mask'];
-                if (mask !== undefined && mask.length > 0) {
+                // if (mask !== undefined && mask.length > 0) {
                     break;
-                }
+                // }
             case 'password':
                 let minlength = input.attr('minlength') ?? 0;
                 let maxlength = input.attr('maxlength') ?? Infinity;
@@ -83,7 +83,7 @@ class odinput {
 
 
 jQuery(document).ready(function (evt) {
-    $inputMask = $(".gotObject[data-objet='odinput']");
+    let $inputMask = $(".gotObject[data-objet='odinput']");
     $.each($inputMask, function () {
         if (typeof $(this).data("mask") !== "undefined") { $(this).find("input").mask($(this).data("mask")); }
     });
@@ -92,28 +92,28 @@ jQuery(document).ready(function (evt) {
         setTimeout(function obj_method(){$("[autofocus='autofocus']").first().focus()},50);
     }
 
-    $(document).on("change", ".gotObject.inputChg[data-objet='odinput']", function (evt) {
+    $(document).on("change", ".gotObject.inputChg[data-objet='odinput']", function (event) {
         let objet = new odinput($(this));
         let invalid = "";
         if (typeof objet.invalidate === "function") { invalid = objet.invalidate(); }
         if (invalid.length === 0) {
             $(this).remove("has-error");
             $(this).find("span").removeClass("hidden").addClass("hidden");
-            invokeAjax(objet.getData("change"), $(this).attr("id"), "change", evt);
+            invokeAjax(objet.getData("change"), $(this).attr("id"), "change", event);
         } else {
             $(this).remove("has-error").addClass("has-error");
             $(this).find("span").removeClass("hidden").html(invalid);
         }
     });
 
-    $(document).on("keyup", ".gotObject.inputKup[data-objet='odinput']", function (evt) {
+    $(document).on("keyup", ".gotObject.inputKup[data-objet='odinput']", function (event) {
         let objet = new odinput($(this));
         let invalid = "";
         if (typeof objet.invalidate === "function") { invalid = objet.invalidate(); }
         if (invalid.length === 0) {
             $(this).remove("has-error");
             $(this).find("span").removeClass("hidden").addClass("hidden");
-            invokeAjax(objet.getData("keyup"), $(this).attr("id"), "keyup", evt);
+            invokeAjax(objet.getData("keyup"), $(this).attr("id"), "keyup", event);
         } else {
             $(this).remove("has-error").addClass("has-error");
             $(this).find("span").removeClass("hidden").html(invalid);

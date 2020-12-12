@@ -188,11 +188,10 @@ class MainController extends AbstractActionController
 
                     $result = array_merge($result, $updDatas);
                 } else {
-                    switch ($callingObj->getObject()) {
-                        case 'oddragndrop':
-                            $updDatas = $updDatas[0];
-                            $updDatas = $updDatas['code'];
-                            break;
+                    $i = $callingObj->getObject();
+                    if ($i == 'oddragndrop') {
+                        $updDatas = $updDatas[0];
+                        $updDatas = $updDatas['code'];
                     }
                     $result = $updDatas;
                 }
@@ -210,6 +209,8 @@ class MainController extends AbstractActionController
                         case (!is_array($dataZC) && strlen($dataZC) > 0):
                             $item = ['id' => $nameZC, 'mode' => 'updZoneComm', 'code' => $dataZC];
                             break;
+                        default:
+                            throw new \Exception('Unexpected value');
                     }
                     array_unshift($result, $item);
                 }
@@ -317,6 +318,8 @@ class MainController extends AbstractActionController
                     case (strpos($item, 'files=') !== false):
                         $files = $this->trimQuote(substr($item, 7), '*');
                         break;
+                    default:
+                        throw new \Exception('Unexpected value');
                 }
             }
             // formatage en sortie en tableau idObj => valeur
