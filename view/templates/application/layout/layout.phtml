@@ -18,18 +18,18 @@
     <?= $this->headLink(['rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'])
         ->prependStylesheet($this->basePath('css/style.css'))
         ->prependStylesheet($this->basePath('css/bootstrap.min.css'))
-        ->prependStylesheet($this->basePath('graphicobjecttemplating/css/font-awesome.css'))
+        ->prependStylesheet("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css")
         ->prependStylesheet($this->basePath('graphicobjecttemplating/css/got-main.css'))
-        ->prependStylesheet($this->basePath('graphicobjecttemplating/css/jquery-ui.min.css'))
-        ->prependStylesheet($this->basePath('graphicobjecttemplating/css/jquery-ui.structure.min.css'))
-        ->prependStylesheet($this->basePath('graphicobjecttemplating/css/jquery-ui.theme.min.css'))
+        ->prependStylesheet("https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css")
+        ->prependStylesheet("https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.structure.min.css")
+        ->prependStylesheet("https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.theme.min.css")
     ?>
 
     <!-- Scripts -->
     <?= $this->headScript() ?>
     <?= $this->headScript()
         ->prependFile($this->basePath('js/bootstrap.min.js'))
-        ->prependFile($this->basePath('js/jquery-3.5.1.min.js'))
+        ->prependFile("https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js")
     ?>
 </head>
 <body class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -69,7 +69,7 @@
 </div>
 
 <?= $this->inlineScript()
-    ->prependFile($this->basePath('graphicobjecttemplating/js/jquery-ui.min.js'))
+    ->prependFile("https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js")
     ->prependFile($this->basePath('graphicobjecttemplating/js/got-main.js'))
 ?>
 
