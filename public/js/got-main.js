@@ -171,7 +171,10 @@ function postAjax(datas) {
                 }
                 break;
             case "raz": // vidage du contenu d’un objet DOM
-                code = '';
+                if (objectDOM !== undefined && objectDOM !== null) {
+                    objectDOM.html('');
+                }
+                break;
             case "innerUpdate": // remplacement du contenu d’un objet DOM
                 if (objectDOM !== undefined && objectDOM !== null) {
                     objectDOM.html(code);
@@ -205,14 +208,14 @@ function postAjax(datas) {
                 }, id );
                 break;
             case 'event': // activation / désactivation évènement : format de code => 'nomEvt|[OUI/NON]'
-                if (objectDOM !== undefined) {
+                if (objectDOM !== undefined && objectDOM !== null) {
                     let evt = code.substring(0, strpos(code, '|'));
                     let flg = code.substring(strpos(code, '|') + 1);
                     objectDOM.attr('data-' + evt + '-stopevt', flg);
                 }
                 break;
             case 'setData': // réaffectation valeur ou contenu associé à un objet
-                if (objectDOM !== undefined) {
+                if (objectDOM !== undefined && objectDOM !== null) {
                     let object = objectDOM.data("objet");
                     let evalString = "new " + object + "(objectDOMM);";
                     jQryObj = eval(evalString);
