@@ -32,7 +32,6 @@ class odinput {
         // TOUTE MODIFICATION DANS LES TRAITEMENTS CI-DESSOUS DEVRA ÊTRE IMPÉRATIVEMENT REPORTÉS DANS LE FICHIER JAVASCRIPT
         // DONT LE NOM ET LE CHEMIN D'ACCÈS À ÉTÉ DONNÉ CI-AVANT POUR GARANTIR L'INTÉGRITÉ DE L'APPLICATION
         // ------------------------------------------------------
-        var data    = this.value;
         var type    = this.type;
         var input   = $('#'+this.id+' input');
         var retour  = '';
@@ -81,6 +80,17 @@ class odinput {
     }
 }
 
+function on_event_do_result(obj, object, evt, invalidate, event) {
+    if (invalid.length === 0) {
+        $(obj).remove("has-error");
+        $(obj).find("span").removeClass("hidden").addClass("hidden");
+        invokeAjax(objet.getData("change"), $(this).attr("id"), "change", event);
+    } else {
+        $(obj).remove("has-error").addClass("has-error");
+        $(obj).find("span").removeClass("hidden").html(invalid);
+    }
+}
+
 
 jQuery(document).ready(function (evt) {
     let $inputMask = $(".gotObject[data-objet='odinput']");
@@ -96,27 +106,13 @@ jQuery(document).ready(function (evt) {
         let objet = new odinput($(this));
         let invalid = "";
         if (typeof objet.invalidate === "function") { invalid = objet.invalidate(); }
-        if (invalid.length === 0) {
-            $(this).remove("has-error");
-            $(this).find("span").removeClass("hidden").addClass("hidden");
-            invokeAjax(objet.getData("change"), $(this).attr("id"), "change", event);
-        } else {
-            $(this).remove("has-error").addClass("has-error");
-            $(this).find("span").removeClass("hidden").html(invalid);
-        }
+        on_event_do_result(this, objet, "change", invalid, event);
     });
 
     $(document).on("keyup", ".gotObject.inputKup[data-objet='odinput']", function (event) {
         let objet = new odinput($(this));
         let invalid = "";
         if (typeof objet.invalidate === "function") { invalid = objet.invalidate(); }
-        if (invalid.length === 0) {
-            $(this).remove("has-error");
-            $(this).find("span").removeClass("hidden").addClass("hidden");
-            invokeAjax(objet.getData("keyup"), $(this).attr("id"), "keyup", event);
-        } else {
-            $(this).remove("has-error").addClass("has-error");
-            $(this).find("span").removeClass("hidden").html(invalid);
-        }
+        on_event_do_result(this, objet, "keyup", invalid, event);
     });
 });

@@ -1,6 +1,7 @@
 <?php
 
 function setEvents($events) {
+    $str = "";
     if (!empty($events)) {
         foreach ($events as $evt => $event) {
             $str .= 'data-' . $evt . '-stopevt = "' . $event['stopEvent'] . '" ';
