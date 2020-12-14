@@ -305,6 +305,9 @@ class LF3GotServices
                     case (str_contains($link, 'oscontainer') && str_starts_with($link, 'oscontainer')):
                         $rscs[$type][$key] = "graphicobjecttemplating/oobjects/{$link}";
                         break;
+                    case (str_starts_with($link, "lib:")):
+                        // ajout de librairie externe
+                        $rscs[$type][$key] = substr($link, 4);
                     default:
                         $rscs[$type][$key] = "graphicobjecttemplating/oobjects/{$var->typeObj}/{$var->object}/{$link}";
                         break;
