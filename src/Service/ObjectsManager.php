@@ -9,10 +9,12 @@ use Exception;
 use GraphicObjectTemplating\OObjects\ODContained;
 use GraphicObjectTemplating\OObjects\OObject;
 use GraphicObjectTemplating\OObjects\OSContainer;
+use http\Exception\InvalidArgumentException;
 use JsonException;
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\Session\Container;
 use MongoDB\Driver\Exception\RuntimeException;
+use UnexpectedValueException;
 
 /**
  * class ObjectsManager
@@ -42,6 +44,8 @@ use MongoDB\Driver\Exception\RuntimeException;
 
 class ObjectsManager
 {
+    const FORMAT_YMDHIS = "Y-m-d H:i:s";
+
     /** @var ServiceManager $serviceManager */
     private $serviceManager;
     /** @var array $config */
@@ -60,7 +64,7 @@ class ObjectsManager
         $this->serviceManager = $sm;
         $this->config = $cfg;
         $this->session = $sc;
-        $this->lastAccess = (new DateTime())->format("Y-m-d H:i:s");
+        $this->lastAccess = (new DateTime())->format(self::FORMAT_YMDHIS);
     }
 
     /**
@@ -81,7 +85,7 @@ class ObjectsManager
                 $retour = false;
             }
         }
-        $this->session->lastAccess = (new DateTime())->format("Y-m-d H:i:s");
+        $this->session->lastAccess = (new DateTime())->format(self::FORMAT_YMDHIS);
         return $retour;
     }
 
@@ -93,7 +97,7 @@ class ObjectsManager
     {
         $this->validate_objs_manager();
         $objects = $this->session->objects ?? [];
-        $this->session->lastAccess = (new DateTime())->format("Y-m-d H:i:s");
+        $this->session->lastAccess = (new DateTime())->format(self::FORMAT_YMDHIS);
         return array_key_exists($id, $objects);
     }
 
@@ -126,14 +130,14 @@ class ObjectsManager
                     $tmpObj->properties = $properties;
                 }
             } elseif (!($obj instanceof ODContained)) {
-                throw new Exception("Objet ".$obj->id." de type inconu");
+                throw new UnexpectedValueException("Objet ".$obj->id." de type inconu");
             }
             $objects[$obj->id] = ($tmpObj) ? serialize($tmpObj->properties) : serialize($obj->properties);
             $this->session->objects = $objects;
-            $this->session->lastAccess = (new DateTime())->format("Y-m-d H:i:s");
+            $this->session->lastAccess = (new DateTime())->format(self::FORMAT_YMDHIS);
             return true;
         }
-        throw new Exception("Objet ".$obj->id." déjà sauvegardé");
+        throw new UnexpectedValueException("Objet ".$obj->id." déjà sauvegardé");
     }
 
     /**
@@ -158,14 +162,14 @@ class ObjectsManager
                     $tmpObj->children = $children;
                 }
             } elseif (!($obj instanceof ODContained)) {
-                throw new Exception("Objet ".$obj->id." de type inconu");
+                throw new InvalidArgumentException("Objet ".$obj->id." de type inconu");
             }
         } else {
-            throw new Exception("Objet ".$obj->id." inconnu en session");
+            throw new UnexpectedValueException("Objet ".$obj->id." inconnu en session");
         }
         $objects[$obj->id] = ($tmpObj) ? serialize($tmpObj->properties) : serialize($obj->properties);
         $this->session->objects = $objects;
-        $this->session->lastAccess = (new DateTime())->format("Y-m-d H:i:s");
+        $this->session->lastAccess = (new DateTime())->format(FORMAT_YMDHIS);
 
         return true;
     }
@@ -180,7 +184,7 @@ class ObjectsManager
         $this->validate_objs_manager();
         $objects = $this->session->objects;
         if (!$this->exist_object($id)) {
-            throw new Exception("Objet ".$id." inconnu");
+            throw new UnexpectedValueException("Objet ".$id." inconnu");
         }
         $properties = unserialize($objects[$id],  ['allowed_classes' => false]);
         $obj = new $properties['className']($id);
@@ -193,7 +197,7 @@ class ObjectsManager
             }
             $obj->children  = $children;
         }
-        $this->session->lastAccess = (new DateTime())->format("Y-m-d H:i:s");
+        $this->session->lastAccess = (new DateTime())->format(FORMAT_YMDHIS);
         return $obj;
     }
 
@@ -213,7 +217,7 @@ class ObjectsManager
         }
         $objects = $this->session->objects;
         if (!$this->exist_object($id)) {
-            throw new Exception("Objet ".$id." inconnu en session");
+            throw new UnexpectedValueException("Objet ".$id." inconnu en session");
         }
 
         if ($obj instanceof OSContainer) {
@@ -224,7 +228,7 @@ class ObjectsManager
 
         unset($objects[$id]);
         $this->session->objects = $objects;
-        $this->session->lastAccess = (new DateTime())->format("Y-m-d H:i:s");
+        $this->session->lastAccess = (new DateTime())->format(FORMAT_YMDHIS);
         return true;
     }
 
@@ -234,7 +238,7 @@ class ObjectsManager
     public function clear_objects(): bool
     {
         $this->session->objects = [];
-        $this->session->lastAccess = (new DateTime())->format("Y-m-d H:i:s");
+        $this->session->lastAccess = (new DateTime())->format(FORMAT_YMDHIS);
         return true;
     }
 

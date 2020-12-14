@@ -7,6 +7,7 @@ use GraphicObjectTemplating\OObjects\ODContained\ODTable;
 use GraphicObjectTemplating\OObjects\OTInfoBulle;
 use GraphicObjectTemplating\OObjects\OObject;
 use GraphicObjectTemplating\OObjects\OSContainer\OSForm;
+use http\Exception\UnexpectedValueException;
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\Session\Container;
 use Laminas\View\Model\ViewModel;
@@ -30,6 +31,8 @@ use Laminas\View\Renderer\PhpRenderer;
  */
 class LF3GotServices
 {
+    const ERR_UNEXPECTED_VALUE_MSG = 'Unexpected value';
+
     /** @var ServiceManager $_serviceManager */
     private $_serviceManager;
     /** @var PhpRenderer $_render */
@@ -86,7 +89,7 @@ class LF3GotServices
                         $classesObj .= ' col-xs-offset-' . substr($item, 2);
                         break;
                     default:
-                        throw new \Exception('Unexpected value');
+                        throw new UnexpectedValueException(ERR_UNEXPECTED_VALUE_MSG);
                 }
             }
         }
@@ -150,7 +153,7 @@ class LF3GotServices
                 $html->setVariable('id', $properties['id']);
                 break;
             default:
-                throw new \Exception('Unexpected value');
+                throw new \UnexpectedValueException(self::ERR_UNEXPECTED_VALUE_MSG);
         }
         $renduHtml .= $this->_render->render($html);
         $renduHtml = preg_replace('/(\s)\s+/', '$1', $renduHtml);
@@ -203,7 +206,7 @@ class LF3GotServices
         $view = new ViewModel();
         $ext = $this->_config['gotParameters']['template_ext'];
         $view->setTemplate(
-            'graphicobjecttemplating/main/got-header.' . $ext);
+            'graphicobjecttemplating/main/got-header.'.$ext);
         $view->setVariable('scripts',
             ['css' => $rscs['css'] ?? [], 'js' => $rscs['js'] ?? [], 'font' => $rscs['fonts'] ?? []]);
 

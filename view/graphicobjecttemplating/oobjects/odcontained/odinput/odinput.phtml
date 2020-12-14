@@ -27,7 +27,7 @@ $valMin = $this->objet['valMin'];
 $valMax = $this->objet['valMax'];
 $mask = $this->objet['mask'];
 $placeholder = $this->objet['placeholder'];
-//$infoBulle = $this->objet['infoBulle'];
+$infoBulle = $this->objet['infoBulle'];
 
 /** traitement de la génération des classes pour event **/
 $objClasses = 'gotObject hidden ' . $id . " " . $classes;
@@ -35,15 +35,11 @@ if ($form) {
     $objClasses .= " form-group row ";
 }
 foreach ($events as $evt => $event) {
-    switch ($evt) {
-        case ODInput::EVENT_CHANGE:
-            $objClasses .= " inputChg ";
-            break;
-        case ODInput::EVENT_KEYUP:
-            $objClasses .= " inputKup ";
-            break;
-        default:
-            throw new \Exception('Unexpected value');
+    if ($evt === ODInput::EVENT_CHANGE) {
+        $objClasses .= " inputChg ";
+    }
+    if ($evt === ODInput::EVENT_KEYUP) {
+        $objClasses .= " inputKup ";
     }
 }
 ?>
@@ -164,10 +160,10 @@ foreach ($events as $evt => $event) {
                 setOnEvents($this->objet['event'], $this->objet);
             }
 
-            //    if ($infoBulle) {
-            //        include $this->asset("graphicobjecttemplating/oobjects/macros/infoBulle.js.phtml");
-            //        setInfoBulle($infoBulle, $id);
-            //    }
+                if ($infoBulle) {
+                    include $this->asset("graphicobjecttemplating/oobjects/infoBulle.js.phtml");
+                    setInfoBulle($infoBulle, $id);
+                }
             ?>
         });
     </script>

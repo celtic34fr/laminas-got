@@ -8,6 +8,7 @@ use GraphicObjectTemplating\OObjects\ODContained\ODDragNDrop;
 use GraphicObjectTemplating\OObjects\OSContainer\OSForm;
 
 use GraphicObjectTemplating\OObjects\OObject;
+use UnexpectedValueException;
 use LaminasGOT\Service\ObjectsManager;
 use LaminasGOT\Service\LF3GotServices;
 
@@ -21,11 +22,13 @@ use Laminas\Session\Container;
 
 class MainController extends AbstractActionController
 {
-    const ModeGenHTML = ['append', 'appendAfter', 'appendBefore', 'update', 'innerUpdate'];
-    const ModeExecJS = ['exec', 'execID'];
-    const ModeRedirect = ['redirect'];
-    const ModeNoOperate = ['nop'];
-    const ModeNoUpdate = ['noUpdate'];
+    const MODE_GEN_HTML = ['append', 'appendAfter', 'appendBefore', 'update', 'innerUpdate'];
+    const MODE_EXEC_JS = ['exec', 'execID'];
+    const MODE_REDIRECT = ['redirect'];
+    const MODE_NO_OPERATE = ['nop'];
+    const MODE_NO_UPDATE = ['noUpdate'];
+
+    const ERR_UNEXPECTED_VALUE_MSG = 'Unexpected value';
 
     /** @var ServiceManager $serviceManager */
     private $serviceManager;
@@ -126,21 +129,21 @@ class MainController extends AbstractActionController
                 foreach ($results as $rlst) {
                     $html = "";
                     switch (true) {
-                        case (in_array($rlst['mode'], self::ModeNoOperate)):
+                        case (in_array($rlst['mode'], self::MODE_NO_OPERATE)):
                             $operate = false;
                             $insert = false;
                             break;
-                        case (in_array($rlst['mode'], self::ModeGenHTML)):
+                        case (in_array($rlst['mode'], self::MODE_GEN_HTML)):
                             $objet = $this->objectsManager->restore_object($rlst['idSource']);
                             $html = !empty($rlst['code']) ? $rlst['code'] : $this->gotServices->render_html($objet);
                             $rscs = $this->gotServices->search_rscs($objet);
                             $insert = true;
                             break;
-                        case (in_array($rlst['mode'], self::ModeExecJS)):
+                        case (in_array($rlst['mode'], self::MODE_EXEC_JS)):
                             $html = !empty($rlst['code']) ? $rlst['code'] : '';
                             $insert = true;
                             break;
-                        case (in_array($rlst['mode'], self::ModeRedirect)):
+                        case (in_array($rlst['mode'], self::MODE_REDIRECT)):
                             $html = !empty($rlst['code']) ? $rlst['code'] : '';
                             $insert = true;
                             $update = false;
@@ -153,7 +156,7 @@ class MainController extends AbstractActionController
                                 $sessionStorageSession->offsetSet($nameZC, $datas);
                             }
                             break;
-                        case (in_array($rlst['mode'], self::ModeNoUpdate)):
+                        case (in_array($rlst['mode'], self::MODE_NO_UPDATE)):
                             $html = !empty($rlst['code']) ? $rlst['code'] : '';
                             $update = false;
                             $insert = false;
@@ -192,6 +195,8 @@ class MainController extends AbstractActionController
                     if ($i == 'oddragndrop') {
                         $updDatas = $updDatas[0];
                         $updDatas = $updDatas['code'];
+                    } else {
+                        throw new UnexpectedValueException(ERR_UNEXPECTED_VALUE_MSG);
                     }
                     $result = $updDatas;
                 }
@@ -210,7 +215,7 @@ class MainController extends AbstractActionController
                             $item = ['id' => $nameZC, 'mode' => 'updZoneComm', 'code' => $dataZC];
                             break;
                         default:
-                            throw new \Exception('Unexpected value');
+                            throw new UnexpectedValueException(ERR_UNEXPECTED_VALUE_MSG);
                     }
                     array_unshift($result, $item);
                 }
@@ -319,7 +324,7 @@ class MainController extends AbstractActionController
                         $files = $this->trimQuote(substr($item, 7), '*');
                         break;
                     default:
-                        throw new \Exception('Unexpected value');
+                        throw new UnexpectedValueException(ERR_UNEXPECTED_VALUE_MSG);
                 }
             }
             // formatage en sortie en tableau idObj => valeur
@@ -412,7 +417,7 @@ class MainController extends AbstractActionController
                 } elseif (strpos($part, ',') === false && ($ind % 2) === 1) {
                     $part1 = $part;
                 } else {
-                    throw new Exception("chaine mal construite");
+                    throw new UnexpectedValueException("chaine mal construite");
                 }
             }
 

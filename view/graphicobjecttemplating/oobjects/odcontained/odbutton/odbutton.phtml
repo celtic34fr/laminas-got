@@ -10,7 +10,7 @@ $object = $this->objet['object'];
 $type = $this->objet['type'];
 $nature = $this->objet['nature'];
 $label = $this->objet['label'];
-//$infoBulle = $this->objet['infoBulle']
+$infoBulle = $this->objet['infoBulle'];
 $pathFile = $this->objet['pathFile'];
 $left = $this->objet['left'];
 $event = $this->objet['event'];
@@ -169,9 +169,9 @@ if ($icon) {
     </script>
     <?php }
 
-    //    if ($infoBulle) {
-    //        include $this->asset("graphicobjecttemplating/oobjects/macros/infoBulle.js.phtml");
-    //        setInfoBulle($infoBulle, $id);
-    //    }
+        if ($infoBulle) {
+            include $this->asset("graphicobjecttemplating/oobjects/infoBulle.js.phtml");
+            setInfoBulle($infoBulle, $id);
+        }
     ?>
 </div>
