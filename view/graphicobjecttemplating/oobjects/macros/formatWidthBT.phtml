@@ -2,89 +2,41 @@
 
 function formatWidthBT($val)
 {
-    $rslt_val = [];
+    // TODO: tester l'insertion d'offset
+    // TODO: voir l'ajout des class CSS col-chiffre et offset-chiffre
+    if (empty($val)) {
+        return false;
+    }
 
-    if (!empty($val)) {
-        $lxs = $lsm = $lmd = $llg = 0;
-        $ixs = $ism = $imd = $ilg = 0;
+    $rlt = [];
+    $rlt["WX"] = $rlt["WS"] = $rlt["WM"] = $rlt["WL"] = 0;
+    $rlt["OX"] = $rlt["OS"] = $rlt["OM"] = $rlt["OL"] = 0;
+    $prefixes = ["WX", "WS", "WM", "WL", "OX", "OS", "OM", "OL"];
 
-        if (is_numeric($val) && (int)$val <= 12) {
-            $lxs = $lsm = $lmd = $llg = (int)$val;
-//                $ixs = $ism = $imd = $ilg = 12 - (int)$val;
-        } else {
-            foreach (explode(':', $val) as $item) {
-                $key = strtoupper($item);
-                switch (substr($key, 0, 2)) {
-                    case 'WL':
-                        $llg = (int)substr($key, 2);
-                        break;
-                    case 'WM':
-                        $lmd = (int)substr($key, 2);
-                        break;
-                    case 'WS':
-                        $lsm = (int)substr($key, 2);
-                        break;
-                    case 'WX':
-                        $lxs = (int)substr($key, 2);
-                        break;
-                    case 'OL':
-                        $ilg = (int)substr($key, 2);
-                        break;
-                    case 'OM':
-                        $imd = (int)substr($key, 2);
-                        break;
-                    case 'OS':
-                        $ism = (int)substr($key, 2);
-                        break;
-                    case 'OX':
-                        $ixs = (int)substr($key, 2);
-                        break;
-                    default:
-                        switch ($key[0]) {
-                            case 'W':
-                                $llg = (int)substr($key, 1);
-                                $lmd = $lsm = $lxs = $llg;
-                                break;
-                            case 'O':
-                                $ilg = (int)substr($key, 1);
-                                $imd = $ism = $ixs = $ilg;
-                                break;
-                            default:
-                                throw new \Exception('Unexpected value');
-                        }
-                        break;
-                }
+    if (is_numeric($val) and (int)$val <= 12) {
+        $rlt["WX"] = $rlt["WS"] = $rlt["WM"] = $rlt["WL"] = (int)$val;
+    } else {
+        foreach (explode(':', $val) as $item) {
+            $key = strtoupper($item);
+            $prefix = substr($key, 0, 2);
+            if (in_array($prefix, $prefixes)) {
+                $rlt[$prefix] = (int)substr($key, 2);
+            } elseif (in_array($key[0], ["W", "O"])) {
+                $rlt[$key[0]."L"] = (int)substr($key, 1);
+                $rlt[$key[0]."M"] = $rlt[$key[0]."S"] = $rlt[$key[0]."X"] = $rlt[$key[0]."L"];
             }
-        }
-
-        if ($llg > 0) {
-            $rslt_val['llg'] = $llg;
-        }
-        if ($lmd > 0) {
-            $rslt_val['lmd'] = $lmd;
-        }
-        if ($lsm > 0) {
-            $rslt_val['lsm'] = $lsm;
-        }
-        if ($lxs > 0) {
-            $rslt_val['lxs'] = $lxs;
-        }
-
-        if ($ilg > 0) {
-            $rslt_val['ilg'] = $ilg;
-        }
-        if ($imd > 0) {
-            $rslt_val['imd'] = $imd;
-        }
-        if ($ism > 0) {
-            $rslt_val['ism'] = $ism;
-        }
-        if ($ixs > 0) {
-            $rslt_val['ixs'] = $ixs;
         }
     }
 
-    return $rslt_val;
+    foreach ($val as $key=>$value) {
+        if (!$value) { unset($rlt[$key]); }
+    }
+
+    if (!empty($val)) {
+        return implode(':', $val);
+    }
+
+    return $val;
 }
 
 function formatWidthBTstr($val)
