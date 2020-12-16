@@ -132,7 +132,6 @@ function postAjax(datas) {
 
         let updId = "";
         let objectDOM = (id !== null && id !== undefined && id.length > 0) ? $('#' + id) : null;
-        let jQryObj = "";
         // analyse du contenu de mode pour détermiser l'action à réaliser avec les paramètres dans code
         switch (mode) {
             // TODO intégrer les actions de gestion de la zone de communication sur le client
@@ -218,7 +217,7 @@ function postAjax(datas) {
                 if (objectDOM !== undefined && objectDOM !== null) {
                     let object = objectDOM.data("objet");
                     let evalString = "new " + object + "(objectDOMM);";
-                    jQryObj = eval(evalString);
+                    let jQryObj = eval(evalString);
                     if (jQryObj) {
                         jQryObj.setData(code);
                     }
@@ -228,7 +227,7 @@ function postAjax(datas) {
                 if (objectDOM !== undefined && objectDOM !== null) {
                     let object = objectDOM.data("objet");
                     let evalString = "new " + object + "(objectDOMM);";
-                    jQryObj = eval(evalString);
+                    let jQryObj = eval(evalString);
                     if (mode in jQryObj) {
                         if (typeof jQryObj[mode] == "function") {
                             jQryObj[mode](code); // TODO: Remove this check in production environment.
