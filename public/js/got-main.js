@@ -229,10 +229,15 @@ function postAjax(datas) {
                     let object = objectDOM.data("objet");
                     let evalString = "new " + object + "(objectDOMM);";
                     jQryObj = eval(evalString);
-                    if (jQryObj && (mode in jQryObj) && (typeof jQryObj[mode]) == "function") {
-                        jQryObj[mode](code); // TODO: Remove this check in production environment.
+                    if (mode in jQryObj) {
+                        if (typeof jQryObj[mode] == "function") {
+                            jQryObj[mode](code); // TODO: Remove this check in production environment.
+                        } else {
+                            console.log(mode + " is not a function of not in " + object);
+                            console.log(jQryObj);
+                        }
                     } else {
-                        console.log(mode + " is not a function of not in " + cls);
+                        console.log(mode + " is not present in " + object);
                         console.log(jQryObj);
                     }
                 } else {
