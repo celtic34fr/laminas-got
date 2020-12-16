@@ -26,7 +26,7 @@ class osform {
         arrayData.each(function () {
             let id    = "";
             let value = "";
-            let type  = "";
+            // let type  = "";
 
             let dataObj = $(this).split("§");
             dataObj.each(function () {
@@ -40,9 +40,9 @@ class osform {
                     case "value":
                         value = $(this).substring(pos +1);
                         break;
-                    case "type":
-                        type = $(this).substring(pos +1);
-                        break;
+                    // case "type":
+                    //     type = $(this).substring(pos +1);
+                    //     break;
                 }
             });
 
