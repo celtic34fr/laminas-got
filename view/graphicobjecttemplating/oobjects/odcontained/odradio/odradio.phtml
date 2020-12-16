@@ -14,6 +14,8 @@ $label = $this->objet['label'];
 $inputWidthBT = $this->objet['inputWidthBT'];
 $options = $this->objet['options'];
 
+const DATA_WIDTHBT = 'data-widthbt="';
+
 $objClasses = 'gotObject hidden ' . $id . ' ' . $classes;
 
 $data = '';
@@ -21,10 +23,10 @@ if ($state === false) {
     $data .= 'disabled ';
 }
 if (!empty($display)) {
-    $data .= 'data-display="' . $display . '" ';
+    $data .= self::DATA_WIDTHBT . $display . '" ';
 }
 if (!empty($widthBT)) {
-    $data .= 'data-widthbt="' . $widthBT . '" ';
+    $data .= self::DATA_WIDTHBT . $widthBT . '" ';
 }
 if (!empty($form)) {
     $data .= 'data-form="' . $form . '" ';
@@ -36,7 +38,7 @@ if ($event) {
 ?>
 <div id="<?= $id ?>>" data-objet="<?= $object ?>" class="radio <?= $objClasses ?>" <?= $data ?> >
     <?php if (!empty($labelWidthBT)) {
-        $data = 'data-widthbt="' . $labelWidthBT . '"';
+        $data = self::DATA_WIDTHBT . $labelWidthBT . '"';
     } else {
         $data = '';
     } ?>
@@ -44,7 +46,7 @@ if ($event) {
         <?= $label ?>
     </div>
     <?php if (!empty($inputWidthBT)) {
-        $data = 'data-widthbt="' . $inputWidthBT . '"';
+        $data = self::DATA_WIDTHBT . $inputWidthBT . '"';
     } else {
         $data = '';
     } ?>
