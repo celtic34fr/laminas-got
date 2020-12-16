@@ -8,7 +8,7 @@ use LaminasGOT\Service\LF3GotServices;
 use LaminasGOT\Service\ObjectsManager;
 use LaminasGOT\Controller\Factory\MainControllerFactory;
 use LaminasGOT\Controller\MainController;
-//use Laminas\Router\Http\Literal;
+use Laminas\Router\Http\Literal;
 
 return [
     'router' => [
