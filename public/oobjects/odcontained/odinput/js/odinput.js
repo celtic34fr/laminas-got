@@ -1,22 +1,21 @@
-
 class odinput {
     constructor(obj) {
-        this.id     = obj.attr('id');
-        this.value  = obj.find('input').val();
-        this.type   = obj.find('input').attr('type');
-        this.form   = obj.find('input').data('form');
-        this.objet  = obj.data('objet');
-        this.data   = obj.data();
+        this.id = obj.attr('id');
+        this.value = obj.find('input').val();
+        this.type = obj.find('input').attr('type');
+        this.form = obj.find('input').data('form');
+        this.objet = obj.data('objet');
+        this.data = obj.data();
     }
 
     getData(evt) {
         let valeur = (this.value !== undefined) ? this.value : '';
-        return {id: this.id, value : valeur, event : evt, object : this.objet};
+        return {id: this.id, value: valeur, event: evt, object: this.objet};
     }
 
     setData(data) {
         this.value = data;
-        $("#"+this.id).find('input').val(data);
+        $("#" + this.id).find('input').val(data);
     }
 
     invalidate() {
@@ -32,38 +31,37 @@ class odinput {
         // TOUTE MODIFICATION DANS LES TRAITEMENTS CI-DESSOUS DEVRA ÊTRE IMPÉRATIVEMENT REPORTÉS DANS LE FICHIER JAVASCRIPT
         // DONT LE NOM ET LE CHEMIN D'ACCÈS À ÉTÉ DONNÉ CI-AVANT POUR GARANTIR L'INTÉGRITÉ DE L'APPLICATION
         // ------------------------------------------------------
-        var type    = this.type;
-        var input   = $('#'+this.id+' input');
-        var retour  = '';
+        var type = this.type;
+        var input = $('#' + this.id + ' input');
+        var retour = '';
         // noinspection FallThroughInSwitchStatementJS
         switch (type) {
             case 'hidden':
                 break;
             case 'text':
-                let mask = this.data['mask'];
-                // if (mask !== undefined && mask.length > 0) {
-                    break;
-                // }
+                // TODO : voir la validation de masque de saisie si existe
+                break;
             case 'password':
                 let minlength = input.attr('minlength') ?? 0;
                 let maxlength = input.attr('maxlength') ?? Infinity;
                 let valueLength = this.value.length;
                 if (minlength > valueLength) {
-                    retour = 'Le champs doit comprendre '+minlength+' caractères minimum';
+                    retour = 'Le champs doit comprendre ' + minlength + ' caractères minimum';
                 } else if (maxlength < valueLength) {
-                    retour = 'Le champs doit comprendre '+maxlength+' caractères maximum';
+                    retour = 'Le champs doit comprendre ' + maxlength + ' caractères maximum';
                 }
                 break;
             case 'number':
-                if (!$.isNumeric(this.value)) { retour = 'Le champs doit être numérique seulement'; }
-                else {
+                if (!$.isNumeric(this.value)) {
+                    retour = 'Le champs doit être numérique seulement';
+                } else {
                     let valMin = this.data['valMin'] ?? -Infinity;
                     let valMax = this.data['valMax'] ?? Infinity;
                     if ($.isNumeric(valMin) && this.value < valMin) {
-                        retour = 'La valeur doit être au moins égale à '+valMin;
+                        retour = 'La valeur doit être au moins égale à ' + valMin;
                     }
                     if (retour.length === 0 && $.isNumeric(valMax) && this.value > valMax) {
-                        retour = 'La valeur doit être au maximum égale à '+valMax;
+                        retour = 'La valeur doit être au maximum égale à ' + valMax;
                     }
                 }
                 break;
@@ -74,7 +72,8 @@ class odinput {
                     retour = 'Veuillez saisir une adresse courriel (email) valide';
                 }
                 break;
-            default: retour = 'Erreur inconnue';
+            default:
+                retour = 'Erreur inconnue';
         }
         return retour;
     }
@@ -95,24 +94,32 @@ function on_event_do_result(obj, object, evt, invalidate, event) {
 jQuery(document).ready(function (evt) {
     let $inputMask = $(".gotObject[data-objet='odinput']");
     $.each($inputMask, function () {
-        if (typeof $(this).data("mask") !== "undefined") { $(this).find("input").mask($(this).data("mask")); }
+        if (typeof $(this).data("mask") !== "undefined") {
+            $(this).find("input").mask($(this).data("mask"));
+        }
     });
 
     if ($("[autofocus=autofocus]").length > 0) {
-        setTimeout(function obj_method(){$("[autofocus='autofocus']").first().focus()},50);
+        setTimeout(function obj_method() {
+            $("[autofocus='autofocus']").first().focus()
+        }, 50);
     }
 
     $(document).on("change", ".gotObject.inputChg[data-objet='odinput']", function (event) {
         let objet = new odinput($(this));
         let invalid = "";
-        if (typeof objet.invalidate === "function") { invalid = objet.invalidate(); }
+        if (typeof objet.invalidate === "function") {
+            invalid = objet.invalidate();
+        }
         on_event_do_result(this, objet, "change", invalid, event);
     });
 
     $(document).on("keyup", ".gotObject.inputKup[data-objet='odinput']", function (event) {
         let objet = new odinput($(this));
         let invalid = "";
-        if (typeof objet.invalidate === "function") { invalid = objet.invalidate(); }
+        if (typeof objet.invalidate === "function") {
+            invalid = objet.invalidate();
+        }
         on_event_do_result(this, objet, "keyup", invalid, event);
     });
 });
