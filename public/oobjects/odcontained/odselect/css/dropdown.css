@@ -30,6 +30,7 @@
     right: 1.2em;
     top: 50%;
     margin-top: -.5em;
+    color: rgba(0,0,0,.4);
 }
 
 .custom-dropdown::before { /*  Custom dropdown arrow cover */
@@ -41,6 +42,7 @@
     top: 0;
     bottom: 0;
     border-radius: 0 3px 3px 0;
+    background-color: rgba(0,0,0,.15);
 }
 
 .custom-dropdown select[disabled] {
@@ -49,12 +51,4 @@
 
 .custom-dropdown select[disabled]::after {
     color: rgba(0,0,0,.1);
-}
-
-.custom-dropdown::before {
-    background-color: rgba(0,0,0,.15);
-}
-
-.custom-dropdown::after {
-    color: rgba(0,0,0,.4);
 }
