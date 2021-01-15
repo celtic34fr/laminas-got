@@ -1,0 +1,123 @@
+<?php
+
+require_once __DIR__ . "/../../../../graphicobjecttemplating/oobjects/macros/formatWidthBT.phtml";
+
+$id = $this->objet['id'];
+$classes = $this->objet['classes'];
+$object = $this->objet['object'];
+$display = $this->objet['display'];
+$widthBT = $this->objet['widthBT'];
+$form = $this->objet['form'];
+$event = $this->objet['event'];
+$wysiwyg = $this->objet['wysiwyg'] ? 'true' : 'false';
+$resize = $this->objet['resize'];
+$label = $this->objet['label'];
+$icon = $this->objet['icon'];
+$labelWidthBT = $this->objet['labelWidthBT'];
+$cols =$this->objet['cols'];
+$rows = $this->objet['rows'];
+$maxLength = $this->objet['maxLength'];
+$placeholder = $this->objet['placeholder'];
+$textareaWidthBT = $this->objet['textareaWidthBT'];
+$state = (bool) $this->objet['state'];
+$text = (string) $this->objet['text'];
+$plugins = $this->objet['plugins'];
+$toolbar = $this->objet['toolbar'];
+$imgListUrl = $this->objet['imgListUrl'];
+$lnkListUrl = $this->objet['lnkListUrl'];
+
+$objClasses = 'gotObject hidden ' . $id . " " . $classes;
+$textareaClass = formatWidthBT($textareaWidthBT);
+$labelClass = formatWidthBT(substr($labelWidthBT, 0, strlen($labelWidthBT) - 1));
+?>
+
+<div id="<?=$id?>" class="<?=$objClasses?> }}" data-objet="<?=$object?>" data-display="<?=$display?>"
+data-widthbt="<?=$widthBT?>" <?php if (!empty($form)) {?> data-form="<?=$form?>" <?php } ?> data-wysiwyg="<?=$wysiwyg?>"
+
+    <?php if ($event) {
+        require_once __DIR__ . "/../../../../graphicobjecttemplating/oobjects/macros/eventsHTML.phtml";
+        setEvents($event);
+    } ?>
+>
+    <style>
+        #<?=$id?> textarea {
+            resize: <?=$resize?>;
+        }
+    </style>
+
+    <?php  if (!empty($label) or !empty($icon)) { ?>
+    <label for="<?=$id?>Textarea"
+           <?php if (!empty($labelWidthBT)) {?> data-widthbt="<?=$labelWidthBT?>" <?php } ?>
+    >
+        <?php if ($icon) {?> <i class="<?=$icon?>"></i> <?php } ?>
+        {{ objet.label }}
+    </label>
+    <?php } ?>
+    <textarea id="<?=$id?>Textarea"
+        <?php if (!empty($cols)) {?> cols="<?=$cols?>" <?php } ?>
+        <?php if (!empty($rows)) {?> rows="<?=$rows?>" <?php } ?>
+        <?php if (!empty($maxLength)) {?> maxlength="<?=$maxLength?>" <?php } ?>
+        <?php if (!empty($textareaClass)) {?> class="<?=$textareaClass?>" <?php } ?>
+        <?php if (!empty($placeholder)) {?> placeholder="<?=$placeholder?>" <?php } ?>
+        <?php if (!empty($textareaWidthBT)) {?> data-widthbt="<?=$textareaWidthBT?>" <?php } ?>
+        <?php if (!$state) {?> disabled <?php } ?>
+    ><?=$text?></textarea>
+
+    <script id="<?=$id?>Scripts">
+        $(document).ready(function (e) {
+            setBtClasses("#<?=$id?> label", $("#<?=$id?> label").data("widthbt"));
+            setBtClasses("#<?=$id?> textarea", $("#<?=$id?> textarea").data("widthbt"));
+
+            <?php if ($wysiwyg) {?>
+            tinymce.init({
+                selector: '#<?=$id?> textarea',
+                plugins: [ '<?=$plugins?>' ],
+                menu: {
+                    file: {title: 'File', items: 'newdocument preview', }
+                },
+                toolbar: [ "<?=$toolbar?>" ],
+                content_css : [__DIR__ . "/../../../../graphicobjecttemplating/oobjects/odcontained/odtextarea/js/tinymce/assets/css/blocks.css",
+                    __DIR__ . "/../../../../graphicobjecttemplating/oobjects/odcontained/odtextarea/js/tinymce/assets/css/app.css",
+                    __DIR__ . "/../../../../graphicobjecttemplating/oobjects/odcontained/odtextarea/js/tinymce/assets/css/custom.css",
+                    __DIR__ . "/../../../../graphicobjecttemplating/oobjects/odcontained/odtextarea/js/tinymce/assets/plugins/bootstrap/css/bootstrap.min.css",
+                    __DIR__ . "/../../../../graphicobjecttemplating/oobjects/odcontained/odtextarea/js/tinymce/assets/plugins/cube-portfolio/cubeportfolio/css/cubeportfolio.min.css"],
+            <?php if (!empty($imgListUrl)) {?>
+                image_list: "<?=$imgListUrl?>",
+                image_advtab: true,
+            <?php } ?>
+            <?php if (!empty($lnkListUrl)) {?>
+                link_list: "<?=$lnkListUrl?>",
+            <?php } ?>
+                relative_urls : false,
+                remove_script_host : true,
+        });
+            <?php } ?>
+
+
+            <?php if (!empty($event)) { ?>
+            $(document).ready(function (e) { <?php
+                require_once __DIR__ . "/../../../../graphicobjecttemplating/oobjects/macros/eventsJS.phtml";
+                setOnEvents($event, $this->objet);
+                ?> });
+            <?php } ?>
+        })
+    </script>
+</div>
+
+/*
+// menubar: "insert",
+// toolbar: "link image numlist bullist charmap",
+// image_list: "/contenu/imageList"
+
+                plugins: [
+                    "advlist autolink lists link image charmap print preview anchor",
+                    "searchreplace visualblocks code fullscreen",
+                    "insertdatetime media table contextmenu paste",
+                    "importcss"
+                ],
+
+                toolbar: ["insertfile undo redo | styleselect | bold italic forecolor backcolor ",
+                    "| alignleft aligncenter alignright alignjustify | link image media table ",
+                    "| numlist bullist outdent indent  | removeformat",
+                    ],
+ */
